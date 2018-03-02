@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.treasure.dao.MallRecordMapper">
+	<resultMap id="BaseResultMap" type="com.treasure.model.MallRecord"> 
+		<id column="mall_id" property="mallId" jdbcType="BIGINT" />
+		<result column="mall_integral" property="mallIntegral" jdbcType="DOUBLE" />
+		<result column="mall_address" property="mallAddress" jdbcType="VARCHAR" />
+		<result column="mall_status" property="mallStatus" jdbcType="VARCHAR" />
+		<result column="mall_createtime" property="mallCreatetime"  />
+		<result column="member_id" property="memberId" />
+		<result column="full_name" property="fullName" jdbcType="VARCHAR" />
+		<result column="username" property="userName" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	
+	<insert id="mallInser" parameterType="com.treasure.model.MallRecord">
+		insert into treasure_mall_recharge_record
+		(mall_integral,mall_address,mall_status,member_id,mall_createtime) 
+		values
+		(
+		#{record.mallIntegral},
+		#{record.mallAddress},
+		#{record.mallStatus},
+		#{record.memberId},
+		#{record.mallCreatetime}
+		)
+	</insert>
+	<select id="selectMallRecord" parameterType="string" resultMap="BaseResultMap">
+		select * from treasure_mall_recharge_record where mall_status=#{mallStatus}
+		
+	</select>
+	
+	<select id="selectRecord" resultMap="BaseResultMap">
+			select * from treasure_mall_recharge_record where mall_status=#{record.mallStatus}
+			and member_id = #{record.memberId} 
+			<if test="pageInfo !=null">
+			ORDER BY mall_createtime DESC 
+			<if test="pageInfo.pageIndex >=0  and pageInfo.pageSize >0">
+				limit
+				#{pageInfo.pageIndex},#{pageInfo.pageSize} 
+			</if>
+			
+		</if>
+	</select>
+	<select id="selectTotalRecord" parameterType="com.treasure.model.MallRecord" resultType="java.lang.Integer">
+			select count(*) from treasure_mall_recharge_record where mall_status=#{record.mallStatus}
+			and member_id = #{record.memberId} 
+			
+	</select>
+	
+	<select id="selectRecordList" resultMap="BaseResultMap">
+			select 
+				m.*,
+				t.*
+				from treasure_member m LEFT JOIN treasure_mall_recharge_record t 
+				on m.id = t.member_id   
+				where 1=1 
+				and t.mall_status=#{record.mallStatus}
+				<if test="(record.fullName!=null and record.fullName!='') or  (record.fullName!='' and record.fullName==0)  ">
+				and m.full_name like
+				"%"#{record.fullName,jdbcType=VARCHAR}"%"
+				</if>
+				<if test="(record.userName!=null and record.userName!='') or  (record.userName!='' and record.userName==0)  ">
+				and m.userName like
+				"%"#{record.userName,jdbcType=VARCHAR}"%"
+		</if>
+			<if test="pageInfo !=null">
+			ORDER BY mall_createtime DESC 
+			<if test="pageInfo.pageIndex >=0  and pageInfo.pageSize >0">
+				limit
+				#{pageInfo.pageIndex},#{pageInfo.pageSize} 
+			</if>
+			
+		</if>
+	</select>
+	
+	<select id="selectTotalRecord1" parameterType="com.treasure.model.MallRecord" resultType="java.lang.Integer">
+			select 
+				count(*)
+				from treasure_member m LEFT JOIN treasure_mall_recharge_record t 
+				on m.id = t.member_id   
+				where 1=1 
+				and t.mall_status=#{record.mallStatus}
+				<if test="(record.fullName!=null and record.fullName!='') or  (record.fullName!='' and record.fullName==0)  ">
+				and m.full_name like
+				"%"#{record.fullName,jdbcType=VARCHAR}"%"
+				</if>
+				<if test="(record.userName!=null and record.userName!='') or  (record.userName!='' and record.userName==0)  ">
+				and m.userName like
+				"%"#{record.userName,jdbcType=VARCHAR}"%"
+		</if>
+	</select>
+	
+</mapper>

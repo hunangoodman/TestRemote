@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.treasure.dao.MobileCodeMapper">
+	<resultMap id="BaseResultMap" type="com.treasure.model.MobileCode">
+		<id column="mobile" property="mobile" jdbcType="VARCHAR" />
+		<result column="code" property="code" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="TINYINT" />
+		<result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		mobile, code, status, add_time
+	</sql>
+	<select id="selectByExample" resultMap="BaseResultMap"
+		parameterType="com.treasure.model.MobileCodeExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from treasure_mobile_code
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	
+	<select id="selectStatu" parameterType="String" resultType="byte">
+		select status from  treasure_mobile_code where mobile=#{mobile} and username=#{username}
+	</select>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from treasure_mobile_code
+		where mobile = #{mobile,jdbcType=VARCHAR}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from
+		treasure_mobile_code
+		where mobile = #{mobile,jdbcType=VARCHAR}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.treasure.model.MobileCodeExample">
+		delete from treasure_mobile_code
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.treasure.model.MobileCode">
+		insert into
+		treasure_mobile_code (mobile, code, status,
+		add_time)
+		values
+		(#{mobile,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR},
+		#{status,jdbcType=TINYINT},
+		#{addTime,jdbcType=TIMESTAMP})
+	</insert>
+	
+	<insert id="insertSelective1" parameterType="com.treasure.model.MobileCode">
+	insert into treasure_mobile_code(mobile,code,status,add_time,username) 
+	values(#{mobile},#{code},#{status},#{addTime},#{userName})
+	</insert>
+	<insert id="insertSelective" parameterType="com.treasure.model.MobileCode">
+		insert into treasure_mobile_code
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="mobile != null">
+				mobile,
+			</if>
+			<if test="code != null">
+				code,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="addTime != null">
+				add_time,
+			</if>
+				username,
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="mobile != null">
+				#{mobile,jdbcType=VARCHAR},
+			</if>
+			<if test="code != null">
+				#{code,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=TINYINT},
+			</if>
+			<if test="addTime != null">
+				#{addTime,jdbcType=TIMESTAMP},
+			</if>
+				#{userName,jdbcType=VARCHAR},
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.treasure.model.MobileCodeExample"
+		resultType="java.lang.Integer">
+		select count(*) from treasure_mobile_code
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update treasure_mobile_code
+		<set>
+			<if test="record.mobile != null">
+				mobile = #{record.mobile,jdbcType=VARCHAR},
+			</if>
+			<if test="record.code != null">
+				code = #{record.code,jdbcType=VARCHAR},
+			</if>
+			<if test="record.status != null">
+				status = #{record.status,jdbcType=TINYINT},
+			</if>
+			<if test="record.addTime != null">
+				add_time = #{record.addTime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update treasure_mobile_code
+		set mobile =
+		#{record.mobile,jdbcType=VARCHAR},
+		code =
+		#{record.code,jdbcType=VARCHAR},
+		status =
+		#{record.status,jdbcType=TINYINT},
+		add_time =
+		#{record.addTime,jdbcType=TIMESTAMP}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.treasure.model.MobileCode">
+		update treasure_mobile_code
+		<set>
+			<if test="code != null">
+				code = #{code,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=TINYINT},
+			</if>
+			<if test="addTime != null">
+				add_time = #{addTime,jdbcType=TIMESTAMP},
+			</if>
+				<if test="userName != null">
+				username = #{userName,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where mobile = #{mobile,jdbcType=VARCHAR}
+	</update>
+	
+	<select id="selectCodeCount" parameterType="String" resultType="int">
+	select count(*) from treasure_mobile_code where username=#{username}
+	</select>
+	<select id="selectCode" parameterType="String" resultType="com.treasure.model.MobileCode">
+	select mobile,code,status,add_time addTime,username userName from treasure_mobile_code where status='1' and mobile=#{mobile} and username=#{userName}
+	</select>
+	<update id="updateByPrimaryKey" parameterType="com.treasure.model.MobileCode">
+		update
+		treasure_mobile_code
+		set code = #{code,jdbcType=VARCHAR},
+		status =
+		#{status,jdbcType=TINYINT},
+		add_time = #{addTime,jdbcType=TIMESTAMP}
+		where mobile = #{mobile,jdbcType=VARCHAR}
+	</update>
+	<!--修改短信状态  -->
+	<update id="updateByPrimaryKey1" parameterType="com.treasure.model.MobileCode">
+		update
+		treasure_mobile_code
+		set code = #{code,jdbcType=VARCHAR},
+		status =
+		#{status,jdbcType=TINYINT},
+		add_time = #{addTime,jdbcType=TIMESTAMP}
+		where mobile = #{mobile,jdbcType=VARCHAR} and username=#{userName,jdbcType=VARCHAR}
+	</update>
+	<select id="selectByMemberId" resultMap="BaseResultMap">
+		select mc.* from
+		treasure_mobile_code mc,treasure_member m where
+		mc.mobile=m.mobile
+		and
+		m.id=#{memberId,jdbcType=BIGINT} limit 1
+	</select>
+</mapper>

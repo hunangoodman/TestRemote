@@ -1,0 +1,503 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.treasure.dao.TradeMapper">
+	<resultMap id="BaseResultMap" type="com.treasure.model.Trade">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="price" property="price" jdbcType="DOUBLE" />
+		<result column="amount" property="amount" jdbcType="DOUBLE" />
+		<result column="time" property="time" jdbcType="VARCHAR" />
+		<result column="type" property="type" jdbcType="INTEGER" />
+		<result column="seller_member_id" property="sellerMemberId"
+			jdbcType="BIGINT" />
+		<result column="buyer_member_id" property="buyerMemberId"
+			jdbcType="BIGINT" />
+		<result column="status" property="status" jdbcType="TINYINT" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<resultMap type="com.treasure.model.Trade" id="TradeHisBaseResultMap"
+		extends="BaseResultMap">
+		<result column="full_name" property="fullName" jdbcType="VARCHAR" />
+		<result column="uuid" property="uuid" jdbcType="VARCHAR" />
+	</resultMap>
+
+
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, price, amount, time, type, seller_member_id,
+		buyer_member_id, status,
+		remark
+	</sql>
+	<select id="selectByExample" resultMap="BaseResultMap"
+		parameterType="com.treasure.model.TradeExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from treasure_trade
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from treasure_trade
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from
+		treasure_trade
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.treasure.model.TradeExample">
+		delete from treasure_trade
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.treasure.model.Trade">
+		insert into treasure_trade
+		(id, price, amount,
+		time, type, seller_member_id,
+		buyer_member_id,
+		status, remark
+		)
+		values (#{id,jdbcType=BIGINT},
+		#{price,jdbcType=DOUBLE},
+		#{amount,jdbcType=INTEGER},
+		#{time,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER},
+		#{sellerMemberId,jdbcType=BIGINT},
+		#{buyerMemberId,jdbcType=BIGINT},
+		#{status,jdbcType=TINYINT},
+		#{remark,jdbcType=VARCHAR}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.treasure.model.Trade">
+		insert into treasure_trade
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="price != null">
+				price,
+			</if>
+			<if test="amount != null">
+				amount,
+			</if>
+			<if test="time != null">
+				time,
+			</if>
+			<if test="type != null">
+				type,
+			</if>
+			<if test="sellerMemberId != null">
+				seller_member_id,
+			</if>
+			<if test="buyerMemberId != null">
+				buyer_member_id,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="remark != null">
+				remark,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="price != null">
+				#{price,jdbcType=DOUBLE},
+			</if>
+			<if test="amount != null">
+				#{amount,jdbcType=INTEGER},
+			</if>
+			<if test="time != null">
+				#{time,jdbcType=VARCHAR},
+			</if>
+			<if test="type != null">
+				#{type,jdbcType=INTEGER},
+			</if>
+			<if test="sellerMemberId != null">
+				#{sellerMemberId,jdbcType=BIGINT},
+			</if>
+			<if test="buyerMemberId != null">
+				#{buyerMemberId,jdbcType=BIGINT},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=TINYINT},
+			</if>
+			<if test="remark != null">
+				#{remark,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.treasure.model.TradeExample"
+		resultType="java.lang.Integer">
+		select count(*) from treasure_trade
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update treasure_trade
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.price != null">
+				price = #{record.price,jdbcType=DOUBLE},
+			</if>
+			<if test="record.amount != null">
+				amount = #{record.amount,jdbcType=INTEGER},
+			</if>
+			<if test="record.time != null">
+				time = #{record.time,jdbcType=VARCHAR},
+			</if>
+			<if test="record.type != null">
+				type = #{record.type,jdbcType=INTEGER},
+			</if>
+			<if test="record.sellerMemberId != null">
+				seller_member_id =
+				#{record.sellerMemberId,jdbcType=BIGINT},
+			</if>
+			<if test="record.buyerMemberId != null">
+				buyer_member_id =
+				#{record.buyerMemberId,jdbcType=BIGINT},
+			</if>
+			<if test="record.status != null">
+				status = #{record.status,jdbcType=TINYINT},
+			</if>
+			<if test="record.remark != null">
+				remark = #{record.remark,jdbcType=VARCHAR},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update treasure_trade
+		set id = #{record.id,jdbcType=BIGINT},
+		price =
+		#{record.price,jdbcType=DOUBLE},
+		amount =
+		#{record.amount,jdbcType=INTEGER},
+		time =
+		#{record.time,jdbcType=VARCHAR},
+		type =
+		#{record.type,jdbcType=INTEGER},
+		seller_member_id =
+		#{record.sellerMemberId,jdbcType=BIGINT},
+		buyer_member_id =
+		#{record.buyerMemberId,jdbcType=BIGINT},
+		status =
+		#{record.status,jdbcType=TINYINT},
+		remark =
+		#{record.remark,jdbcType=VARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.treasure.model.Trade">
+		update treasure_trade
+		<set>
+			<if test="price != null">
+				price = #{price,jdbcType=DOUBLE},
+			</if>
+			<if test="amount != null">
+				amount = #{amount,jdbcType=INTEGER},
+			</if>
+			<if test="time != null">
+				time = #{time,jdbcType=VARCHAR},
+			</if>
+			<if test="type != null">
+				type = #{type,jdbcType=INTEGER},
+			</if>
+			<if test="sellerMemberId != null">
+				seller_member_id = #{sellerMemberId,jdbcType=BIGINT},
+			</if>
+			<if test="buyerMemberId != null">
+				buyer_member_id = #{buyerMemberId,jdbcType=BIGINT},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=TINYINT},
+			</if>
+			<if test="remark != null">
+				remark = #{remark,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.treasure.model.Trade">
+		update
+		treasure_trade
+		set price = #{price,jdbcType=DOUBLE},
+		amount =
+		#{amount,jdbcType=INTEGER},
+		time = #{time,jdbcType=VARCHAR},
+		type =
+		#{type,jdbcType=INTEGER},
+		seller_member_id =
+		#{sellerMemberId,jdbcType=BIGINT},
+		buyer_member_id =
+		#{buyerMemberId,jdbcType=BIGINT},
+		status = #{status,jdbcType=TINYINT},
+		remark = #{remark,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<!-- 查询所有记录 -->
+	<select id="selectTradeByPageWithMemberId" resultMap="BaseResultMap">
+		select * from treasure_trade where buyer_member_id =
+		#{memberId,jdbcType=BIGINT} or seller_member_id =
+		#{memberId,jdbcType=BIGINT}
+		<if test="pageVo !=null"><!-- 判断pageVo对象是否为空 -->
+			<if test="pageVo.sortField !=null  and pageVo.sortOrder !=null">
+				order by
+				${pageVo.sortField} ${pageVo.sortOrder}
+			</if>
+			<if test="pageVo.pageIndex >=0  and pageVo.pageSize >0">
+				limit
+				#{pageVo.pageIndex,jdbcType=INTEGER},#{pageVo.pageSize,jdbcType=INTEGER}
+			</if>
+		</if>
+	</select>
+	<select id="selectList" resultMap="TradeHisBaseResultMap">
+		select t.*,tm.full_name as full_name,tm.uuid from treasure_trade
+		t LEFT JOIN treasure_member tm ON t.seller_member_id = tm.id where 1=1
+		<if test="trade !=null">
+			<if test="trade.type!=null">
+				and t.type =#{trade.type,jdbcType=INTEGER}
+				<if test="trade.type==1">
+					and t.buyer_member_id =
+					#{trade.memberId,jdbcType=BIGINT}
+				</if>
+				<if test="trade.type==2">
+					and t.seller_member_id =
+					#{trade.memberId,jdbcType=BIGINT}
+				</if>
+				<if test="trade.type==3">
+					and t.seller_member_id =
+					#{trade.memberId,jdbcType=BIGINT}
+				</if>
+			</if>
+		</if>
+		<if test="pageVo !=null">
+			<if test="pageVo.sortField !=null  and pageVo.sortOrder !=null">
+				order by
+				${pageVo.sortField} ${pageVo.sortOrder}
+			</if>
+			<if test="pageVo.pageIndex >=0  and pageVo.pageSize >0">
+				limit
+				#{pageVo.pageIndex,jdbcType=INTEGER},#{pageVo.pageSize,jdbcType=INTEGER}
+			</if>
+		</if>
+	</select>
+	<select id="selectList2" resultMap="TradeHisBaseResultMap">
+		select t.*,tm.full_name as full_name,tm.uuid from treasure_trade
+		t LEFT JOIN treasure_member tm ON t.buyer_member_id = tm.id where t.buyer_member_id = #{trade.memberId,jdbcType=BIGINT}
+		and t.type = 1
+		<if test="pageVo !=null">
+			<if test="pageVo.sortField !=null  and pageVo.sortOrder !=null">
+				order by
+				${pageVo.sortField} ${pageVo.sortOrder}
+			</if>
+			<if test="pageVo.pageIndex >=0  and pageVo.pageSize >0">
+				limit
+				#{pageVo.pageIndex,jdbcType=INTEGER},#{pageVo.pageSize,jdbcType=INTEGER}
+			</if>
+		</if>
+	</select>
+	<select id="selectList3" resultMap="TradeHisBaseResultMap">
+		select t.*,tm.full_name as full_name,tm.uuid from treasure_trade
+		t LEFT JOIN treasure_member tm ON t.buyer_member_id = tm.id where t.buyer_member_id = #{trade.memberId,jdbcType=BIGINT}
+		and t.type = 3
+		<if test="pageVo !=null">
+			<if test="pageVo.sortField !=null  and pageVo.sortOrder !=null">
+				order by
+				${pageVo.sortField} ${pageVo.sortOrder}
+			</if>
+			<if test="pageVo.pageIndex >=0  and pageVo.pageSize >0">
+				limit
+				#{pageVo.pageIndex,jdbcType=INTEGER},#{pageVo.pageSize,jdbcType=INTEGER}
+			</if>
+		</if>
+	</select>
+	
+	<select id="selectList4" resultMap="TradeHisBaseResultMap">
+		select t.*,tm.full_name as full_name,tm.uuid from treasure_trade
+		t LEFT JOIN treasure_member tm ON t.seller_member_id = tm.id where t.seller_member_id = #{trade.memberId,jdbcType=BIGINT}
+		and t.type = 3
+		<if test="pageVo !=null">
+			<if test="pageVo.sortField !=null  and pageVo.sortOrder !=null">
+				order by 
+				${pageVo.sortField} ${pageVo.sortOrder}
+			</if>
+			<if test="pageVo.pageIndex >=0  and pageVo.pageSize >0">
+				limit
+				#{pageVo.pageIndex,jdbcType=INTEGER},#{pageVo.pageSize,jdbcType=INTEGER}
+			</if>
+		</if>
+	</select>
+	<select id="selectCount4" resultType="java.lang.Integer">
+		select count(1) from (
+			select t.*,tm.full_name as full_name,tm.uuid,2 as flag from treasure_trade
+		t LEFT JOIN treasure_member tm ON t.seller_member_id = tm.id where t.seller_member_id = #{trade.memberId,jdbcType=BIGINT}
+		and t.type = 3
+		)t
+		ORDER BY t.time desc
+	</select>
+	<select id="selectCount" resultType="java.lang.Integer">
+		select count(t.id) from treasure_trade
+		t,treasure_member tm where 1=1
+		<if test="trade !=null">
+			<if test="trade.type!=null">
+				and t.type =#{trade.type,jdbcType=INTEGER}
+				<if test="trade.type==1">
+					and t.buyer_member_id =
+					#{trade.memberId,jdbcType=BIGINT}
+					and tm.id = t.buyer_member_id
+				</if>
+				<if test="trade.type==2">
+					and t.seller_member_id =
+					#{trade.memberId,jdbcType=BIGINT}
+					and tm.id = t.seller_member_id
+				</if>
+				<if test="trade.type==3">
+					and t.seller_member_id =
+					#{trade.memberId,jdbcType=BIGINT}
+					and tm.id = t.buyer_member_id
+				</if>
+			</if>
+		</if>
+		ORDER BY t.time desc
+	</select>
+	
+	<select id="selectCount2" resultType="java.lang.Integer">
+		select count(1) from (
+			select t.*,tm.full_name as full_name,tm.uuid from treasure_trade
+		t LEFT JOIN treasure_member tm ON t.buyer_member_id = tm.id where t.buyer_member_id = #{trade.memberId,jdbcType=BIGINT}
+		and t.type = 1
+		)t
+	</select>
+	
+	<select id="selectCount3" resultType="java.lang.Integer">
+		select count(1) from (
+			select t.*,tm.full_name as full_name,tm.uuid from treasure_trade
+		t LEFT JOIN treasure_member tm ON t.buyer_member_id = tm.id where t.buyer_member_id = #{trade.memberId,jdbcType=BIGINT}
+		and t.type = 3
+		)t
+		ORDER BY t.time desc
+	</select>
+	<select id="selectTradeList" resultMap="BaseResultMap">
+		SELECT
+			a.id,
+			a.price,
+			ifnull(SUM(a.amount),0) amount,
+			a.time,
+			a.type,
+			a.seller_member_id,
+			a.buyer_member_id,
+			a.status,
+			a.remark
+		FROM
+			treasure_trade a
+		WHERE 1=1
+		<if test="trade !=null">
+			<if test="trade.type!=null">
+				and a.type =#{trade.type,jdbcType=INTEGER}
+			</if>
+			<if test="trade.status!=null">
+				and a.status =#{trade.status,jdbcType=INTEGER}
+			</if>
+		</if>
+		GROUP BY
+			a.price
+		order by price desc limit 0,10
+	</select>
+	<select id="selectByPrice" resultMap="BaseResultMap">
+		select * from treasure_trade where status = 2  
+		<![CDATA[and price <= #{price,jdbcType=DOUBLE}]]>
+	</select>
+	
+	<select id="selectInfoByPrice" resultMap="BaseResultMap">
+		SELECT
+			a.*
+		FROM
+			treasure_trade a
+		WHERE
+			a.type = 2 and a.status = 2
+		AND a.price <![CDATA[<=]]> #{price}
+	</select>
+</mapper>

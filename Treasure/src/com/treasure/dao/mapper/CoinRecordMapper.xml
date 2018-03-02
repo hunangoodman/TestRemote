@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.treasure.dao.CoinRecordMapper">
+	<resultMap type="com.treasure.model.CoinRecord" id="RecordMap">
+			<id property="id" column="id" />
+			<result property="memberId" column="member_id" />
+			<result property="recordDate" column="record_date" />
+			<result property="coin" column="coin" />
+			<result property="fullName" column="full_name" />
+			<result property="menber" column="menber" />
+			<result property="userName" column="username" />
+			<result property="mobile" column="mobile" />
+	</resultMap>
+	
+	<insert id="addRecoed" parameterType="com.treasure.model.CoinRecord">
+		insert into treasure_coin_record(member_id,record_date,coin) 
+		values
+		(#{memberId},#{recordDate},#{coin})
+	</insert>
+	<select id="findAll" resultMap="RecordMap">
+	select tr.*,m.username,m.mobile from treasure_coin_record tr,treasure_member m 
+	where
+	 m.id=tr.member_id
+	  <if test='member.mobile!=null and member.mobile!=""'>
+	  	and m.mobile like "%"#{member.mobile}"%"
+	  </if>
+	  <if test='member.fullName!=null and member.fullName!=""'>
+	  	and m.full_name like "%"#{member.fullName}"%"
+	  </if>
+	  order by tr.record_date desc
+	<if test="pageVo !=null">
+			<if test="pageVo.pageIndex >=0  and pageVo.pageSize >0">
+				limit
+				#{pageVo.pageIndex},#{pageVo.pageSize} 
+			</if>
+		</if>
+	</select>
+	<select id="selectCount" resultType="int">
+	select count(*) from treasure_coin_record
+	</select>
+	<select id="findByName" resultMap="RecordMap">
+	select tr.*,m.full_name,m.mobile from treasure_coin_record tr,treasure_member m 
+	where
+	 m.id=tr.member_id and m.full_name like CONCAT('%','${name}','%')
+	</select>
+</mapper>

@@ -1,0 +1,311 @@
+.page-content {
+	padding: 20px;
+}
+
+.page-content .portlet {
+	border: 1px solid #F5F5F5;
+}
+
+.page-content .portlet-title {
+	width: 100%;
+	height: 40px;
+	background: #F5F5F5;
+	padding: 8px 20px;
+	font-size: 20px;
+	font-weight: bold;
+}
+
+.portlet-body table.table {
+	margin-top: 60px;
+}
+
+.page-content .portlet-title .title {
+	color: black;
+}
+
+.details-title {
+	font-weight: bold;
+	padding-bottom: 10px;
+}
+
+.tab-pane {
+	padding: 15px 0;
+}
+
+.product-img {
+	float: left;
+	width: 15%;
+}
+
+.product-content {
+	float: left;
+	width: 85%;
+}
+
+.product-title, product-table {
+	width: 100%;
+}
+
+.product-name {
+	float: left;
+	width: 80%;
+}
+
+.product-btns {
+	float: left;
+	width: 20%;
+	text-align: right;
+}
+
+.product-btn {
+	background-color: #FF865D;
+	border: none;
+	padding: 5px 10px;
+	color: #ffffff;
+	cursor: pointer;
+}
+
+.tab-tools {
+	float: right;
+	padding: 10px;
+	position: absolute;
+	right: 10px;
+	top: 60px;
+}
+
+.tools-btn {
+	width: 70px;
+	font-size: 14px;
+	text-align: center;
+	float: right;
+	cursor: pointer;
+}
+
+.tools-btn label {
+	cursor: pointer;
+}
+
+.tools-btn i {
+	font-size: 20px;
+}
+
+.tabbable {
+	margin-top: 10px;
+}
+
+.product-text {
+	color: #437FA7;
+	margin-left: 10px;
+}
+
+.product-price {
+	color: #FF865D;
+	margin-left: 10px;
+}
+
+.center-title {
+	width: 100%;
+	height: 40px;
+	background: #F5F5F5;
+	padding: 8px 20px;
+	font-size: 16px;
+	font-weight: bold;
+}
+
+.center-title button.product-btn {
+	padding: 2px 10px;
+	margin-left: 15px;
+	margin-top: -5px;
+}
+
+.center-box {
+	min-height: 50px;
+	padding: 10px 0;
+}
+
+.center-box ul {
+	list-style: none;
+	margin: 0;
+	padding: 10px;
+	display: table;
+}
+
+.center-box>ul>li {
+	float: left;
+	margin: 5px;
+	background: #437fa7;
+	color: #ffffff;
+	padding: 8px;
+}
+
+.compare-box {
+	background: #3B434C;
+	height: 100%;
+	position: fixed;
+	width: 280px;
+	right: -280px;
+	top: 0;
+	z-index: 60;
+	border: 1px solid gray;
+	color: #eee;
+}
+
+.compare-box-title {
+	display: table;
+	height: 8%;
+	padding: 5px 15px;
+	position: relative;
+	width: 100%;
+}
+
+.compare-box-title h4 {
+	font-weight: bold;
+	float: left;
+}
+
+.compare-box-title button {
+	float: right;
+	margin-top: 5px;
+	margin-left: 5px;
+}
+
+.compare-box-content {
+	padding: 5px;
+	overflow: auto;
+	height: 92%;
+	position: static;
+}
+
+ul.compare-list {
+	list-style: none;
+	padding: 0;
+	height: 80%;
+}
+
+ul.compare-list>li {
+	height: 100px;
+	width: 100%;
+	border: 1px dashed gray;
+	padding: 8px;
+	line-height: 16px;
+}
+
+ul.compare-list>li>a {
+	display: block;
+	height: 80px;
+	vertical-align: top;
+}
+
+ul.compare-list>li>a>img {
+	width: 80px;
+	height: 80px;
+	float: left;
+}
+
+ul.compare-list>li>a>label {
+	color: #fff;
+	width: 160px;
+	height: 80px;
+	padding: 0 5px;
+	position: absolute;
+	float: right;
+	cursor: pointer;
+	word-break: break-all;
+	word-wrap: break-word;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	font-size: 12px;
+	word-wrap: break-word;
+}
+
+ul.compare-list>li>span {
+	position: absolute;
+	left: 15px;
+	font-size: 22px;
+	color: #d9534f;
+	cursor: pointer;
+}
+
+.tooltip {
+	z-index: 1000;
+}
+
+.cell-hover {
+	background: #332d2d;
+	color: #fff;
+}
+
+.product-btn-group {
+	display: inline-block;
+	position: relative;
+	vertical-align: middle;
+	margin-top: -3px;
+	margin-left: 150px;
+	float: left;
+}
+
+.product-btn-group>button {
+	margin-left: 0;
+	float: left;
+	position: relative;
+	background: none;
+	border-radius: 0;
+	color: #437FA7;
+}
+
+.product-btn-group>.switcher {
+	float: left;
+}
+
+.product-btn-group>button.active {
+	background: #437FA7;
+	color: #fff;
+}
+
+.center-title label {
+	float: left;
+}
+
+.center-title>.form-group {
+	float: left;
+	width: 400px;
+}
+
+.center-title>.form-group>.input-group {
+	margin-top: -3px;
+}
+
+.chart-icon {
+	color: #91C7AE;
+}
+
+.p-msg-content {
+	width: 100%;
+	display: table-row;
+}
+
+.change-msg-title {
+	width: 5%;
+	padding-left: 15px;
+}
+
+.change-msg {
+	width: 90%;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+.cell-content button {
+	min-width: 100px;
+	max-width: 200px;
+}
+
+.desc-text {
+	color: #b1b7bc;
+}
+
+.remark-content::-webkit-input-placeholder::before {
+	color: red;
+	content: "Line 1\A Line 2\A Line 3\A";
+}

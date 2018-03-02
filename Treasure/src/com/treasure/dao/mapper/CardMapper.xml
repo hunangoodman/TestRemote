@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.treasure.dao.CardMapper">
+	<resultMap type="com.treasure.model.Card" id="CardMap">
+			<id property="id" column="id" />
+			<result property="memberId" column="member_id" />
+			<result property="cardNumber" column="card_number" />
+			<result property="cardInfo" column="card_info" />
+			<result property="fullName" column="full_name" />
+	</resultMap>
+	
+	<insert id="addCard" parameterType="com.treasure.model.Card">
+		insert into treasure_card(member_id,card_number,card_info,full_name) 
+		values
+		(#{memberId},#{cardNumber},#{cardInfo},#{fullName})
+	</insert>
+	<select id="findAll" resultMap="CardMap">
+	select tr.* from treasure_card tr,treasure_member m 
+	where
+	 m.id=tr.member_id and tr.member_id=#{id}
+	</select>
+	<select id="findByCardNumber" parameterType="String" resultType="String">
+	select card_number from treasure_card where card_number=#{cardNumber}
+	</select>
+	<select id="findByCardId" parameterType="Long" resultType="String">
+	select card_number from treasure_card where member_id=#{memberId}
+	</select>
+	
+	<update id="updataCard" parameterType="com.treasure.model.Card">
+		update treasure_card 
+		<set>
+		<if test="record.cardNumber !='' and record.cardNumber != null ">
+			 card_number=#{record.cardNumber},
+		</if>
+		<if test="record.cardInfo !='' and record.cardInfo !=null " >
+			card_info=#{record.cardInfo},
+		</if>
+		<if test="record.fullName !='' and record.fullName !=null " >
+			full_name=#{record.fullName},
+		</if>
+		</set>
+		where 
+		member_id=#{record.memberId}
+	</update>
+	<delete id="delete" parameterType="String">
+		delete from treasure_card where member_id=#{id}
+	</delete>
+	
+	<select id="selectCardId" parameterType="long" resultMap="CardMap">
+		select * from treasure_card where member_id=#{memberId}
+	</select>
+</mapper>

@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.treasure.dao.BtoolsConsultMapper">
+	<resultMap type="com.treasure.model.BtoolsConsult" id="BtoolsConsultMap">
+			<id property="conId" column="con_id" />
+			<result property="conHeadline" column="con_headline" />
+			<result property="conImg" column="con_img" />
+			<result property="conContent" column="con_content" />
+			<result property="conAuthor" column="con_author" />
+			<result property="status" column="status" />
+			<result property="conDate" column="con_date" />
+			<result property="addDate" column="add_date" />
+	</resultMap>
+	
+	
+	<resultMap type="com.treasure.model.BtoolsConsult" id="BtoolsConsultSimpleMap">
+			<id property="conId" column="con_id" />
+			<result property="conHeadline" column="con_headline" />
+			<result property="conImg" column="con_img" />
+			<result property="conContent" column="con_content" />
+			<result property="conAuthor" column="con_author" />
+			<result property="status" column="status" />
+			<result property="conDate" column="con_date" />
+			<result property="addDate" column="add_date" />
+	</resultMap>
+	
+	<sql id="columns">
+			con_id,
+			con_headline,
+			con_img,
+			con_content,
+			con_author,
+			status,
+			con_date,
+			add_date
+	</sql>
+	
+	<sql id="propertys">
+			#{item.conId},
+			#{item.conHeadline},
+			#{item.conImg},
+			#{item.conContent},
+			#{item.conAuthor},
+			#{item.status},
+			#{item.conDate},
+			#{item.addDate}
+	</sql>
+	
+	<!-- where sql -->
+	<sql id="where_sql">
+		 
+		 <if test="record!=null">
+			<if test="(record.conId!=null and record.conId!='') or  (record.conId!='' and record.conId==0)  ">
+				and con_id  = #{record.conId} 
+			</if>
+			<if test="(record.conHeadline!=null and record.conHeadline!='') or  (record.conHeadline!='' and record.conHeadline==0)  ">
+				and con_headline  = #{record.conHeadline} 
+			</if>
+			<if test="(record.conImg!=null and record.conImg!='') or  (record.conImg!='' and record.conImg==0)  ">
+				and con_img  = #{record.conImg} 
+			</if>
+			<if test="(record.conContent!=null and record.conContent!='') or  (record.conContent!='' and record.conContent==0)  ">
+				and con_content  = #{record.conContent} 
+			</if>
+			<if test="(record.conAuthor!=null and record.conAuthor!='') or  (record.conAuthor!='' and record.conAuthor==0)  ">
+				and con_author  = #{record.conAuthor} 
+			</if>
+			<if test="(record.status!=null and record.status!='') or  (record.status!='' and record.status==0)  ">
+				and status  = #{record.status} 
+			</if>
+			<if test="(record.conDate!=null and record.conDate!='') or  (record.conDate!='' and record.conDate==0)  ">
+				and con_date  = #{record.conDate} 
+				
+			</if>
+			<if test="(record.addDate!=null and record.addDate!='') or  (record.addDate!='' and record.addDate==0)  ">
+				and add_date  = #{record.addDate} 
+				
+			</if>
+		</if>
+		 
+	</sql>
+	
+	<insert id="insert" parameterType="BtoolsConsult"
+		useGeneratedKeys="true" keyProperty="item.conId">
+		INSERT INTO btools_consult (
+			 <include refid="columns"></include>
+		)
+	VALUES (
+		 <include refid="propertys"></include>
+	)
+	</insert>
+	
+	
+	
+	<insert id="batchInsert" parameterType="java.util.List">
+		INSERT INTO btools_consult (
+		<include refid="columns"></include>	
+		)
+	VALUES 
+	<foreach collection="list" item="item" index="index" separator=",">(
+		<include refid="propertys"></include>	
+	)</foreach>
+	</insert>
+	
+	
+	
+	
+	
+	<update id="updateByMap" parameterType="java.util.HashMap" >
+		UPDATE btools_consult
+		<set>
+			<if test="_parameter.containsKey('conHeadline')">
+					con_headline = #{conHeadline},
+				</if>		
+			<if test="_parameter.containsKey('conImg')">
+					con_img = #{conImg},
+				</if>		
+			<if test="_parameter.containsKey('conContent')">
+					con_content = #{conContent},
+				</if>		
+			<if test="_parameter.containsKey('conAuthor')">
+					con_author = #{conAuthor},
+				</if>		
+			<if test="_parameter.containsKey('status')">
+					status = #{status},
+				</if>		
+			<if test="_parameter.containsKey('conDate')">
+					con_date = #{conDate},
+				</if>	
+			<if test="_parameter.containsKey('addDate')">
+					add_date = #{addDate},
+				</if>	
+		</set>
+		WHERE con_id=#{conId} 
+	</update> 
+	
+	
+	<update id="updateByModel" parameterType="Long">
+		UPDATE btools_consult
+		<set>
+			<if test="record.conHeadline != null and record.conHeadline != '' ">
+				con_headline  = #{record.conHeadline}, 
+			</if>
+			<if test="record.conImg != null and record.conImg != '' ">
+				con_img  = #{record.conImg}, 
+			</if>
+			<if test="record.conContent != null and record.conContent != '' ">
+				con_content  = #{record.conContent}, 
+			</if>
+			<if test="record.conAuthor != null and record.conAuthor != '' ">
+				con_author  = #{record.conAuthor}, 
+			</if>
+			<if test="record.status != null ">
+				status  = #{record.status}, 
+			</if>
+			<if test="record.conDate != null ">
+				con_date  = #{record.conDate}, 
+			</if>
+			<if test="record.addDate != null ">
+				add_date  = #{record.addDate}, 
+			</if>
+		</set>
+		WHERE con_id=#{record.conId} 
+	</update>
+	
+	<delete id="deleteByIds" parameterType="java.util.List">
+		delete from btools_consult where  con_id in
+		<foreach collection="list" index="index" item="item" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+		
+	<delete id="deleteById" parameterType="Long">
+		DELETE FROM btools_consult
+		where  con_id=#{conId} 
+	</delete>
+	
+	<delete id="deleteByModel" parameterType="Long">
+		DELETE FROM btools_consult
+		where 1=1
+		<include refid="where_sql" ></include>
+	</delete>
+	
+	
+	
+	<select id="selectInPage" resultMap="BtoolsConsultMap">
+		select 
+		<include refid="columns" ></include>
+		from btools_consult
+		where 1=1  <include refid="where_sql"></include>
+		<if test="pageInfo !=null">
+			ORDER BY con_date DESC 
+			<if test="pageInfo.pageIndex >=0  and pageInfo.pageSize >0">
+				limit
+				#{pageInfo.pageIndex},#{pageInfo.pageSize} 
+			</if>
+			
+		</if>
+	</select>
+	
+	<select id="selectTotalRecord" parameterType="Long"   resultType="java.lang.Integer">
+	select count(*)
+	from btools_consult
+		where 1=1   <include refid="where_sql"></include>
+	</select>
+
+	<select id="selectById" resultMap="BtoolsConsultMap">
+		select 
+		<include refid="columns" ></include>
+		from btools_consult
+		where  con_id=#{conId} 
+	</select>	
+	
+	
+	<select id="selectForUpdate" resultMap="BtoolsConsultMap">
+		select 
+		<include refid="columns" ></include>
+		from btools_consult
+		where  con_id=#{con_id} 
+		for update
+	</select>	
+	
+	
+	
+	<select id="selectByModel" resultMap="BtoolsConsultMap">
+		select 
+		<include refid="columns" ></include>
+		from btools_consult
+		where 1=1  <include refid="where_sql"></include> 
+		ORDER BY con_date DESC 
+	</select>
+</mapper>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.treasure.dao.MoneyManagementMapper">
+<resultMap id="BaseResultMap" type="com.treasure.model.MoneyManagement">
+	<result property="managementId" column="managementid" />
+	<result property="financialManagement" column="financialmanagement" />
+	<result property="investMentperiod" column="investmentperiod" />
+	<result property="memberId" column="memberid" />
+	<result property="cretateTime" column="cretatetime" />
+	<result property="money" column="money" />
+	<result property="type" column="type" />
+	<result property="end_time" column="endTime" />
+</resultMap>
+	
+	<insert id="insert" parameterType="com.treasure.model.MoneyManagement">
+		insert into treasure_moneymanagement
+		(financialmanagement, 
+		investmentperiod,
+		memberid,
+		money,
+		type,
+		end_time
+		)values 
+		(#{record.financialManagement},
+		#{record.investMentperiod},
+		#{record.memberId},
+		#{record.money},
+		#{record.type},
+		#{record.endTime}
+		)
+	</insert>
+	<select id="selectAll" resultMap="BaseResultMap">
+		select managementId,financialManagement,investMentperiod,memberId,cretateTime,money,type,end_time from treasure_moneymanagement
+	</select>
+	<!--转入  -->
+	<select id="selectTurninto" resultMap="BaseResultMap">
+			select * from treasure_moneymanagement where financialManagement = #{record.financialManagement}
+			and memberId = #{record.memberId} 
+			<if test="pageInfo !=null">
+			ORDER BY cretateTime DESC 
+			<if test="pageInfo.pageIndex >=0  and pageInfo.pageSize >0">
+				limit
+				#{pageInfo.pageIndex},#{pageInfo.pageSize} 
+			</if>
+		</if>
+	</select>
+	
+	
+	<select id="selectTurnintoTotal" parameterType="com.treasure.model.MoneyManagement" resultType="java.lang.Integer">
+			select count(*) from treasure_moneymanagement where #{record.financialManagement}
+			and memberId = #{record.memberId} 
+	</select>
+	
+	
+</mapper>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="resources"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/cors-filter-1.7.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/java-property-utils-1.9.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/core-3.3.0.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/qrcode-2.1.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
+	<classpathentry kind="output" path="build/classes"/>
+</classpath>

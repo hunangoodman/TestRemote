@@ -1,0 +1,426 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.treasure.dao.ModuleMapper">
+	<resultMap id="BaseResultMap" type="com.treasure.model.Module">
+		<id column="module_id" property="moduleId" jdbcType="INTEGER" />
+		<result column="module_name" property="moduleName" jdbcType="VARCHAR" />
+		<result column="path" property="path" jdbcType="VARCHAR" />
+		<result column="level" property="level" jdbcType="INTEGER" />
+		<result column="icon" property="icon" jdbcType="VARCHAR" />
+		<result column="parent_id" property="parentId" jdbcType="INTEGER" />
+		<result column="is_used" property="isUsed" jdbcType="INTEGER" />
+		<result column="description" property="description" jdbcType="VARCHAR" />
+		<result column="open_type" property="openType" jdbcType="INTEGER" />
+	</resultMap>
+	<resultMap id="BaseResultMap1" extends="BaseResultMap"
+		type="com.treasure.model.Module">
+		<collection property="functions" select="selectFunctionByModuleId1"
+			column="module_id" ofType="com.treasure.model.Function"></collection>
+	</resultMap>
+	<resultMap id="ModuleResultMap" type="com.treasure.model.Module"
+		extends="BaseResultMap">
+		<result column="role_id" property="roleId" jdbcType="INTEGER" />
+		<collection property="functions" select="selectFunctionByModuleId"
+			column="{moduleId=module_id,roleId=role_id}" ofType="com.treasure.model.Function"></collection>
+		<collection property="checked" select="selectStateByRoleId"
+			column="{moduleId=module_id,roleId=role_id}" ofType="java.lang.Boolean"></collection>
+	</resultMap>
+	<resultMap id="FunctionResultMap" type="com.treasure.model.Function">
+		<id column="function_id" property="functionId" jdbcType="INTEGER" />
+		<result column="role_id" property="roleId" jdbcType="INTEGER" />
+		<result column="module_id" property="moduleId" jdbcType="INTEGER" />
+		<result column="type" property="type" jdbcType="INTEGER" />
+		<result column="function_name" property="functionName"
+			jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap id="FunctionResultMap1" extends="FunctionResultMap"
+		type="com.treasure.model.Function">
+		<collection property="checked" select="selectFnStateByRoleId"
+			column="{moduleId=module_id,roleId=role_id,functionId=function_id}"
+			ofType="java.lang.Boolean"></collection>
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		module_id, module_name, path, level, icon, parent_id,
+		is_used, description,
+		open_type
+	</sql>
+	<select id="selectByExample" resultMap="BaseResultMap1"
+		parameterType="com.treasure.model.ModuleExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from btools_modulenser 
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap1"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from btools_module
+		where module_id = #{moduleId,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from
+		btools_module
+		where module_id = #{moduleId,jdbcType=INTEGER}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.treasure.model.ModuleExample">
+		delete from btools_module
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.treasure.model.Module"
+		useGeneratedKeys="true" keyProperty="moduleId">
+		insert into btools_module
+		(module_id, module_name, path,
+		level, icon, parent_id,
+		is_used,
+		description, open_type
+		)
+		values (#{moduleId,jdbcType=INTEGER},
+		#{moduleName,jdbcType=VARCHAR},
+		#{path,jdbcType=VARCHAR},
+		#{level,jdbcType=INTEGER}, #{icon,jdbcType=VARCHAR},
+		#{parentId,jdbcType=INTEGER},
+		#{isUsed,jdbcType=INTEGER},
+		#{description,jdbcType=VARCHAR},
+		#{openType,jdbcType=INTEGER}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.treasure.model.Module"
+		useGeneratedKeys="true" keyProperty="moduleId">
+		insert into btools_module
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="moduleId != null">
+				module_id,
+			</if>
+			<if test="moduleName != null">
+				module_name,
+			</if>
+			<if test="path != null">
+				path,
+			</if>
+			<if test="level != null">
+				level,
+			</if>
+			<if test="icon != null">
+				icon,
+			</if>
+			<if test="parentId != null">
+				parent_id,
+			</if>
+			<if test="isUsed != null">
+				is_used,
+			</if>
+			<if test="description != null">
+				description,
+			</if>
+			<if test="openType != null">
+				open_type,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="moduleId != null">
+				#{moduleId,jdbcType=INTEGER},
+			</if>
+			<if test="moduleName != null">
+				#{moduleName,jdbcType=VARCHAR},
+			</if>
+			<if test="path != null">
+				#{path,jdbcType=VARCHAR},
+			</if>
+			<if test="level != null">
+				#{level,jdbcType=INTEGER},
+			</if>
+			<if test="icon != null">
+				#{icon,jdbcType=VARCHAR},
+			</if>
+			<if test="parentId != null">
+				#{parentId,jdbcType=INTEGER},
+			</if>
+			<if test="isUsed != null">
+				#{isUsed,jdbcType=INTEGER},
+			</if>
+			<if test="description != null">
+				#{description,jdbcType=VARCHAR},
+			</if>
+			<if test="openType != null">
+				#{openType,jdbcType=INTEGER},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.treasure.model.ModuleExample"
+		resultType="java.lang.Integer">
+		select count(*) from btools_module
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update btools_module
+		<set>
+			<if test="record.moduleId != null">
+				module_id = #{record.moduleId,jdbcType=INTEGER},
+			</if>
+			<if test="record.moduleName != null">
+				module_name = #{record.moduleName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.path != null">
+				path = #{record.path,jdbcType=VARCHAR},
+			</if>
+			<if test="record.level != null">
+				level = #{record.level,jdbcType=INTEGER},
+			</if>
+			<if test="record.icon != null">
+				icon = #{record.icon,jdbcType=VARCHAR},
+			</if>
+			<if test="record.parentId != null">
+				parent_id = #{record.parentId,jdbcType=INTEGER},
+			</if>
+			<if test="record.isUsed != null">
+				is_used = #{record.isUsed,jdbcType=INTEGER},
+			</if>
+			<if test="record.description != null">
+				description = #{record.description,jdbcType=VARCHAR},
+			</if>
+			<if test="record.openType != null">
+				open_type = #{record.openType,jdbcType=INTEGER},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update btools_module
+		set module_id =
+		#{record.moduleId,jdbcType=INTEGER},
+		module_name =
+		#{record.moduleName,jdbcType=VARCHAR},
+		path =
+		#{record.path,jdbcType=VARCHAR},
+		level =
+		#{record.level,jdbcType=INTEGER},
+		icon =
+		#{record.icon,jdbcType=VARCHAR},
+		parent_id =
+		#{record.parentId,jdbcType=INTEGER},
+		is_used =
+		#{record.isUsed,jdbcType=INTEGER},
+		description =
+		#{record.description,jdbcType=VARCHAR},
+		open_type =
+		#{record.openType,jdbcType=INTEGER}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.treasure.model.Module">
+		update btools_module
+		<set>
+			<if test="moduleName != null">
+				module_name = #{moduleName,jdbcType=VARCHAR},
+			</if>
+			<if test="path != null">
+				path = #{path,jdbcType=VARCHAR},
+			</if>
+			<if test="level != null">
+				level = #{level,jdbcType=INTEGER},
+			</if>
+			<if test="icon != null">
+				icon = #{icon,jdbcType=VARCHAR},
+			</if>
+			<if test="parentId != null">
+				parent_id = #{parentId,jdbcType=INTEGER},
+			</if>
+			<if test="isUsed != null">
+				is_used = #{isUsed,jdbcType=INTEGER},
+			</if>
+			<if test="description != null">
+				description = #{description,jdbcType=VARCHAR},
+			</if>
+			<if test="openType != null">
+				open_type = #{openType,jdbcType=INTEGER},
+			</if>
+		</set>
+		where module_id = #{moduleId,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.treasure.model.Module">
+		update
+		btools_module
+		set module_name = #{moduleName,jdbcType=VARCHAR},
+		path =
+		#{path,jdbcType=VARCHAR},
+		level = #{level,jdbcType=INTEGER},
+		icon =
+		#{icon,jdbcType=VARCHAR},
+		parent_id =
+		#{parentId,jdbcType=INTEGER},
+		is_used = #{isUsed,jdbcType=INTEGER},
+		description =
+		#{description,jdbcType=VARCHAR},
+		open_type =
+		#{openType,jdbcType=INTEGER}
+		where module_id =
+		#{moduleId,jdbcType=INTEGER}
+	</update>
+	<!--根据角色，查询该角色资源 -->
+	<select id="selectModuleByRoleid" resultMap="BaseResultMap"
+		parameterType="java.util.List">
+		select distinct * from btools_module where is_used=1
+		<if test="list !=null">
+			and module_id in(
+			select distinct
+			module_id from
+			btools_role_module
+			where
+			role_id in
+			<foreach collection="list" index="index" item="item" open="("
+				separator="," close=")">
+				#{item}
+			</foreach>
+			)
+		</if>
+	</select>
+	<!-- 根据资源查询功能按钮组 -->
+	<select id="selectFunctionByModuleId" resultMap="FunctionResultMap1"
+		parameterType="java.util.HashMap">
+		select function_id,type,function_name,#{roleId} as
+		role_id,#{moduleId} as module_id from
+		btools_function
+		where function_id
+		in(select function_id from
+		btools_module_function
+		where
+		module_id=#{moduleId})
+	</select>
+	<select id="selectFunctionByModuleId1" resultMap="FunctionResultMap"
+		parameterType="java.lang.Integer">
+		select function_id,type,function_name from
+		btools_function
+		where function_id
+		in(select function_id from
+		btools_module_function
+		where
+		module_id=#{moduleId})
+	</select>
+	<select id="selectStateByRoleId" resultType="java.lang.Boolean"
+		parameterType="java.util.HashMap">
+		select count(1) from btools_role_module where
+		role_id=#{roleId} and module_id=#{moduleId}
+	</select>
+	<select id="selectFnStateByRoleId" resultType="java.lang.Boolean"
+		parameterType="java.util.HashMap">
+		select count(1) from btools_role_module where
+		role_id=#{roleId} and module_id=#{moduleId} and
+		function_id=#{functionId}
+	</select>
+	<!-- 根据资源查询功能按钮组 -->
+	<select id="selectModuleByUser" resultMap="BaseResultMap">
+		select * from btools_module where is_used=1
+		<if test="user !=null">
+			and (module_id in(select module_id from
+			btools_role_module
+			where role_id in(select role_id from
+			btools_user_role where
+			user_id=#{user.nid,jdbcType=BIGINT})))
+		</if>
+		order by open_type asc
+	</select>
+	<!-- 批量删除 -->
+	<delete id="deleteModuleByKey" parameterType="java.util.List">
+		delete from btools_module where module_id in
+		<foreach collection="list" index="index" item="item" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	<!-- 修改其子节点的启用状态 -->
+	<update id="updateChildren" parameterType="com.treasure.model.Module">
+		update
+		btools_module
+		set
+		is_used = #{isUsed,jdbcType=INTEGER} where
+		parent_id =
+		#{moduleId,jdbcType=INTEGER}
+	</update>
+	<select id="selectModuleList" resultMap="ModuleResultMap">
+		select
+		t.*,#{roleId,jdbcType=INTEGER} as role_id from
+		btools_module t where
+		t.is_used=1
+	</select>
+</mapper>

@@ -1,0 +1,565 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.treasure.dao.OrderMapper">
+	<resultMap id="BaseResultMap" type="com.treasure.model.Order">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="member_id" property="memberId" jdbcType="BIGINT" />
+		<result column="mobile" property="mobile" jdbcType="VARCHAR" />
+		<result column="order_no" property="orderNo" jdbcType="VARCHAR" />
+		<result column="price" property="price" jdbcType="DOUBLE" />
+		<result column="quantity" property="quantity" jdbcType="INTEGER" />
+		<result column="integral" property="integral" jdbcType="DOUBLE" />
+		<result column="pay_type" property="payType" jdbcType="INTEGER" />
+		<result column="full_name" property="fullName" jdbcType="VARCHAR" />
+		<result column="total_amount" property="totalAmount" jdbcType="DOUBLE" />
+		<result column="recharge_amount" property="rechargeAmount"
+			jdbcType="DOUBLE" />
+		<result column="pay_number" property="payNumber" jdbcType="VARCHAR" />
+		<result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+		<result column="status" property="status" jdbcType="TINYINT" />
+		<result column="pay_status" property="payStatus" jdbcType="TINYINT" />
+		<result column="pay_order_no" property="payOrderNo" jdbcType="VARCHAR" />
+		<result column="check_msg" property="checkMsg" jdbcType="VARCHAR" />
+		<result column="check_time" property="checkTime" jdbcType="TIMESTAMP" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap type="com.treasure.model.Order" id="AddressResultMap"
+		extends="BaseResultMap">
+		<result column="address" property="address" jdbcType="VARCHAR" />
+		<result column="uuid" property="uuid" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, member_id, mobile, order_no, price, quantity, integral,
+		pay_type,
+		full_name,
+		total_amount, recharge_amount, pay_number,
+		add_time, status, pay_status,
+		pay_order_no,
+		check_msg, check_time,
+		remark
+	</sql>
+	<select id="selectByExample" resultMap="BaseResultMap"
+		parameterType="com.treasure.model.OrderExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from treasure_order
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from treasure_order
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from
+		treasure_order
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.treasure.model.OrderExample">
+		delete from treasure_order
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.treasure.model.Order"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into treasure_order
+		(id,
+		member_id, mobile,
+		order_no, price, quantity,
+		integral, pay_type,
+		full_name,
+		total_amount, recharge_amount, pay_number,
+		add_time, status,
+		pay_status,
+		pay_order_no, check_msg, check_time,
+		remark)
+		values
+		(#{id,jdbcType=BIGINT}, #{memberId,jdbcType=BIGINT},
+		#{mobile,jdbcType=VARCHAR},
+		#{orderNo,jdbcType=VARCHAR},
+		#{price,jdbcType=DOUBLE}, #{quantity,jdbcType=INTEGER},
+		#{integral,jdbcType=DOUBLE}, #{payType,jdbcType=INTEGER},
+		#{fullName,jdbcType=VARCHAR},
+		#{totalAmount,jdbcType=DOUBLE},
+		#{rechargeAmount,jdbcType=DOUBLE}, #{payNumber,jdbcType=VARCHAR},
+		#{addTime,jdbcType=TIMESTAMP}, #{status,jdbcType=TINYINT},
+		#{payStatus,jdbcType=TINYINT},
+		#{payOrderNo,jdbcType=VARCHAR},
+		#{checkMsg,jdbcType=VARCHAR}, #{checkTime,jdbcType=TIMESTAMP},
+		#{remark,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.treasure.model.Order"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into treasure_order
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="memberId != null">
+				member_id,
+			</if>
+			<if test="mobile != null">
+				mobile,
+			</if>
+			<if test="orderNo != null">
+				order_no,
+			</if>
+			<if test="price != null">
+				price,
+			</if>
+			<if test="quantity != null">
+				quantity,
+			</if>
+			<if test="integral != null">
+				integral,
+			</if>
+			<if test="payType != null">
+				pay_type,
+			</if>
+			<if test="fullName != null">
+				full_name,
+			</if>
+			<if test="totalAmount != null">
+				total_amount,
+			</if>
+			<if test="rechargeAmount != null">
+				recharge_amount,
+			</if>
+			<if test="payNumber != null">
+				pay_number,
+			</if>
+			<if test="addTime != null">
+				add_time,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="payStatus != null">
+				pay_status,
+			</if>
+			<if test="payOrderNo != null">
+				pay_order_no,
+			</if>
+			<if test="checkMsg != null">
+				check_msg,
+			</if>
+			<if test="checkTime != null">
+				check_time,
+			</if>
+			<if test="remark != null">
+				remark,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="memberId != null">
+				#{memberId,jdbcType=BIGINT},
+			</if>
+			<if test="mobile != null">
+				#{mobile,jdbcType=VARCHAR},
+			</if>
+			<if test="orderNo != null">
+				#{orderNo,jdbcType=VARCHAR},
+			</if>
+			<if test="price != null">
+				#{price,jdbcType=DOUBLE},
+			</if>
+			<if test="quantity != null">
+				#{quantity,jdbcType=INTEGER},
+			</if>
+			<if test="integral != null">
+				#{integral,jdbcType=DOUBLE},
+			</if>
+			<if test="payType != null">
+				#{payType,jdbcType=INTEGER},
+			</if>
+			<if test="fullName != null">
+				#{fullName,jdbcType=VARCHAR},
+			</if>
+			<if test="totalAmount != null">
+				#{totalAmount,jdbcType=DOUBLE},
+			</if>
+			<if test="rechargeAmount != null">
+				#{rechargeAmount,jdbcType=DOUBLE},
+			</if>
+			<if test="payNumber != null">
+				#{payNumber,jdbcType=VARCHAR},
+			</if>
+			<if test="addTime != null">
+				#{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=TINYINT},
+			</if>
+			<if test="payStatus != null">
+				#{payStatus,jdbcType=TINYINT},
+			</if>
+			<if test="payOrderNo != null">
+				#{payOrderNo,jdbcType=VARCHAR},
+			</if>
+			<if test="checkMsg != null">
+				#{checkMsg,jdbcType=VARCHAR},
+			</if>
+			<if test="checkTime != null">
+				#{checkTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="remark != null">
+				#{remark,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.treasure.model.OrderExample"
+		resultType="java.lang.Integer">
+		select count(*) from treasure_order
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update treasure_order
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.memberId != null">
+				member_id = #{record.memberId,jdbcType=BIGINT},
+			</if>
+			<if test="record.mobile != null">
+				mobile = #{record.mobile,jdbcType=VARCHAR},
+			</if>
+			<if test="record.orderNo != null">
+				order_no = #{record.orderNo,jdbcType=VARCHAR},
+			</if>
+			<if test="record.price != null">
+				price = #{record.price,jdbcType=DOUBLE},
+			</if>
+			<if test="record.quantity != null">
+				quantity = #{record.quantity,jdbcType=INTEGER},
+			</if>
+			<if test="record.integral != null">
+				integral = #{record.integral,jdbcType=DOUBLE},
+			</if>
+			<if test="record.payType != null">
+				pay_type = #{record.payType,jdbcType=INTEGER},
+			</if>
+			<if test="record.fullName != null">
+				full_name = #{record.fullName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.totalAmount != null">
+				total_amount = #{record.totalAmount,jdbcType=DOUBLE},
+			</if>
+			<if test="record.rechargeAmount != null">
+				recharge_amount =
+				#{record.rechargeAmount,jdbcType=DOUBLE},
+			</if>
+			<if test="record.payNumber != null">
+				pay_number = #{record.payNumber,jdbcType=VARCHAR},
+			</if>
+			<if test="record.addTime != null">
+				add_time = #{record.addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.status != null">
+				status = #{record.status,jdbcType=TINYINT},
+			</if>
+			<if test="record.payStatus != null">
+				pay_status = #{record.payStatus,jdbcType=TINYINT},
+			</if>
+			<if test="record.payOrderNo != null">
+				pay_order_no = #{record.payOrderNo,jdbcType=VARCHAR},
+			</if>
+			<if test="record.checkMsg != null">
+				check_msg = #{record.checkMsg,jdbcType=VARCHAR},
+			</if>
+			<if test="record.checkTime != null">
+				check_time = #{record.checkTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.remark != null">
+				remark = #{record.remark,jdbcType=VARCHAR},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update treasure_order
+		set id = #{record.id,jdbcType=BIGINT},
+		member_id =
+		#{record.memberId,jdbcType=BIGINT},
+		mobile =
+		#{record.mobile,jdbcType=VARCHAR},
+		order_no =
+		#{record.orderNo,jdbcType=VARCHAR},
+		price =
+		#{record.price,jdbcType=DOUBLE},
+		quantity =
+		#{record.quantity,jdbcType=INTEGER},
+		integral =
+		#{record.integral,jdbcType=DOUBLE},
+		pay_type =
+		#{record.payType,jdbcType=INTEGER},
+		full_name =
+		#{record.fullName,jdbcType=VARCHAR},
+		total_amount =
+		#{record.totalAmount,jdbcType=DOUBLE},
+		recharge_amount =
+		#{record.rechargeAmount,jdbcType=DOUBLE},
+		pay_number =
+		#{record.payNumber,jdbcType=VARCHAR},
+		add_time =
+		#{record.addTime,jdbcType=TIMESTAMP},
+		status =
+		#{record.status,jdbcType=TINYINT},
+		pay_status =
+		#{record.payStatus,jdbcType=TINYINT},
+		pay_order_no =
+		#{record.payOrderNo,jdbcType=VARCHAR},
+		check_msg =
+		#{record.checkMsg,jdbcType=VARCHAR},
+		check_time =
+		#{record.checkTime,jdbcType=TIMESTAMP},
+		remark =
+		#{record.remark,jdbcType=VARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.treasure.model.Order">
+		update treasure_order
+		<set>
+			<if test="memberId != null">
+				member_id = #{memberId,jdbcType=BIGINT},
+			</if>
+			<if test="mobile != null">
+				mobile = #{mobile,jdbcType=VARCHAR},
+			</if>
+			<if test="orderNo != null">
+				order_no = #{orderNo,jdbcType=VARCHAR},
+			</if>
+			<if test="price != null">
+				price = #{price,jdbcType=DOUBLE},
+			</if>
+			<if test="quantity != null">
+				quantity = #{quantity,jdbcType=INTEGER},
+			</if>
+			<if test="integral != null">
+				integral = #{integral,jdbcType=DOUBLE},
+			</if>
+			<if test="payType != null">
+				pay_type = #{payType,jdbcType=INTEGER},
+			</if>
+			<if test="fullName != null">
+				full_name = #{fullName,jdbcType=VARCHAR},
+			</if>
+			<if test="totalAmount != null">
+				total_amount = #{totalAmount,jdbcType=DOUBLE},
+			</if>
+			<if test="rechargeAmount != null">
+				recharge_amount = #{rechargeAmount,jdbcType=DOUBLE},
+			</if>
+			<if test="payNumber != null">
+				pay_number = #{payNumber,jdbcType=VARCHAR},
+			</if>
+			<if test="addTime != null">
+				add_time = #{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=TINYINT},
+			</if>
+			<if test="payStatus != null">
+				pay_status = #{payStatus,jdbcType=TINYINT},
+			</if>
+			<if test="payOrderNo != null">
+				pay_order_no = #{payOrderNo,jdbcType=VARCHAR},
+			</if>
+			<if test="checkMsg != null">
+				check_msg = #{checkMsg,jdbcType=VARCHAR},
+			</if>
+			<if test="checkTime != null">
+				check_time = #{checkTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="remark != null">
+				remark = #{remark,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.treasure.model.Order">
+		update
+		treasure_order
+		set member_id = #{memberId,jdbcType=BIGINT},
+		mobile =
+		#{mobile,jdbcType=VARCHAR},
+		order_no = #{orderNo,jdbcType=VARCHAR},
+		price = #{price,jdbcType=DOUBLE},
+		quantity =
+		#{quantity,jdbcType=INTEGER},
+		integral = #{integral,jdbcType=DOUBLE},
+		pay_type = #{payType,jdbcType=INTEGER},
+		full_name =
+		#{fullName,jdbcType=VARCHAR},
+		total_amount =
+		#{totalAmount,jdbcType=DOUBLE},
+		recharge_amount =
+		#{rechargeAmount,jdbcType=DOUBLE},
+		pay_number =
+		#{payNumber,jdbcType=VARCHAR},
+		add_time =
+		#{addTime,jdbcType=TIMESTAMP},
+		status = #{status,jdbcType=TINYINT},
+		pay_status = #{payStatus,jdbcType=TINYINT},
+		pay_order_no =
+		#{payOrderNo,jdbcType=VARCHAR},
+		check_msg =
+		#{checkMsg,jdbcType=VARCHAR},
+		check_time =
+		#{checkTime,jdbcType=TIMESTAMP},
+		remark = #{remark,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<!-- 查询所有记录条数 -->
+	<select id="selectCount" resultType="java.lang.Integer">
+		select count(id) from treasure_order where 1=1
+		<if test="record !=null"><!-- 判断对象是否为空 -->
+			<if test="record.memberId != null">
+				and member_id = #{record.memberId,jdbcType=BIGINT}
+			</if>
+			<if test="record.status != null">
+				and status = #{record.status,jdbcType=TINYINT}
+			</if>
+			<if test="record.payStatus != null">
+				and pay_status = #{record.payStatus,jdbcType=TINYINT}
+			</if>
+			<if test="record.mobile != null and record.mobile !='' ">
+				and mobile =
+				#{record.mobile,jdbcType=VARCHAR}
+			</if>
+			<if test="record.fullName != null and record.fullName !='' ">
+				and full_name like
+				"%"#{record.fullName,jdbcType=VARCHAR}"%"
+			</if>
+		</if>
+	</select>
+	<!-- 查询所有记录 -->
+	<select id="selectList" resultMap="AddressResultMap">
+		select o.*,m.address,m.uuid from treasure_order o,treasure_member m where
+		o.member_id=m.id
+		<if test="record !=null"><!-- 判断对象是否为空 -->
+			<if test="record.memberId != null">
+				and o.member_id = #{record.memberId,jdbcType=BIGINT}
+			</if>
+			<if test="record.status != null">
+				and o.status = #{record.status,jdbcType=TINYINT}
+			</if>
+			<if test="record.payStatus != null">
+				and o.pay_status = #{record.payStatus,jdbcType=TINYINT}
+			</if>
+			<if test="record.mobile != null and record.mobile !='' ">
+				and o.mobile =
+				#{record.mobile,jdbcType=VARCHAR}
+			</if>
+			<if test="record.fullName != null and record.fullName !='' ">
+				and o.full_name like
+				"%"#{record.fullName,jdbcType=VARCHAR}"%"
+			</if>
+		</if>
+		<if test="pageInfo !=null"><!-- 判断pageInfo对象是否为空 -->
+			<if test="pageInfo.sortField !=null  and pageInfo.sortOrder !=null">
+				order by
+				${pageInfo.sortField} ${pageInfo.sortOrder}
+			</if>
+			<if test="pageInfo.pageIndex >=0  and pageInfo.pageSize >0">
+				limit
+				#{pageInfo.pageIndex,jdbcType=INTEGER},#{pageInfo.pageSize,jdbcType=INTEGER}
+			</if>
+		</if>
+	</select>
+	<select id="selectByOrderNo" resultType="com.treasure.model.Order">
+		select total_amount as
+		totalAmount from
+		treasure_order where order_no =
+		#{orderNo,jdbcType=VARCHAR} limit 1
+	</select>
+	<!-- 查询会员 -->
+	<select id="selectByMemId" resultType="java.lang.Integer">
+	    SELECT IFNULL(SUM(a.quantity),0) total FROM treasure_order a WHERE a.member_id = #{memId} AND a.pay_status = 1
+	</select>
+</mapper>

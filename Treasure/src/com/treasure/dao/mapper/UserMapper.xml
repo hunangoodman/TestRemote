@@ -1,0 +1,484 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.treasure.dao.UserMapper">
+	<resultMap id="BaseResultMap" type="com.treasure.model.User">
+		<id column="user_id" property="userId" jdbcType="BIGINT" />
+		<result column="full_name" property="fullName" jdbcType="VARCHAR" />
+		<result column="user_name" property="userName" jdbcType="VARCHAR" />
+		<result column="job_no" property="jobNo" jdbcType="VARCHAR" />
+		<result column="password" property="password" jdbcType="VARCHAR" />
+		<result column="user_type" property="userType" jdbcType="INTEGER" />
+		<result column="parent_id" property="parentId" jdbcType="BIGINT" />
+		<result column="company_id" property="companyId" jdbcType="BIGINT" />
+		<result column="mobile_phone" property="mobilePhone" jdbcType="VARCHAR" />
+		<result column="email" property="email" jdbcType="VARCHAR" />
+		<result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="description" property="description" jdbcType="VARCHAR" />
+		<collection property="rlist" select="selectRoleByUserId"
+			column="user_id" ofType="com.treasure.model.Role"></collection>
+	</resultMap>
+	<resultMap id="RoleResultMap" type="com.treasure.model.Role">
+		<id column="role_id" property="roleId" jdbcType="BIGINT" />
+		<result column="role_name" property="roleName" jdbcType="VARCHAR" />
+		<result column="company_id" property="companyId" jdbcType="INTEGER" />
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		user_id, full_name, user_name, job_no, password, user_type,
+		parent_id,
+		company_id,
+		mobile_phone, email, add_time, status,
+		description
+	</sql>
+	<select id="selectByExample" resultMap="BaseResultMap"
+		parameterType="com.treasure.model.UserExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from btools_user
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from btools_user
+		where user_id = #{userId,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from
+		btools_user
+		where user_id = #{userId,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.treasure.model.UserExample">
+		delete from btools_user
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.treasure.model.User"
+		useGeneratedKeys="true" keyProperty="userId">
+		insert into btools_user
+		(user_id,
+		full_name, user_name,
+		job_no, password, user_type,
+		parent_id,
+		company_id, mobile_phone,
+		email, add_time, status,
+		description)
+		values
+		(#{userId,jdbcType=BIGINT}, #{fullName,jdbcType=VARCHAR},
+		#{userName,jdbcType=VARCHAR},
+		#{jobNo,jdbcType=VARCHAR},
+		#{password,jdbcType=VARCHAR}, #{userType,jdbcType=INTEGER},
+		#{parentId,jdbcType=BIGINT}, #{companyId,jdbcType=BIGINT},
+		#{mobilePhone,jdbcType=VARCHAR},
+		#{email,jdbcType=VARCHAR},
+		#{addTime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER},
+		#{description,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.treasure.model.User"
+		useGeneratedKeys="true" keyProperty="userId">
+		insert into btools_user
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="userId != null">
+				user_id,
+			</if>
+			<if test="fullName != null">
+				full_name,
+			</if>
+			<if test="userName != null">
+				user_name,
+			</if>
+			<if test="jobNo != null">
+				job_no,
+			</if>
+			<if test="password != null">
+				password,
+			</if>
+			<if test="userType != null">
+				user_type,
+			</if>
+			<if test="parentId != null">
+				parent_id,
+			</if>
+			<if test="companyId != null">
+				company_id,
+			</if>
+			<if test="mobilePhone != null">
+				mobile_phone,
+			</if>
+			<if test="email != null">
+				email,
+			</if>
+			<if test="addTime != null">
+				add_time,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="description != null">
+				description,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="userId != null">
+				#{userId,jdbcType=BIGINT},
+			</if>
+			<if test="fullName != null">
+				#{fullName,jdbcType=VARCHAR},
+			</if>
+			<if test="userName != null">
+				#{userName,jdbcType=VARCHAR},
+			</if>
+			<if test="jobNo != null">
+				#{jobNo,jdbcType=VARCHAR},
+			</if>
+			<if test="password != null">
+				#{password,jdbcType=VARCHAR},
+			</if>
+			<if test="userType != null">
+				#{userType,jdbcType=INTEGER},
+			</if>
+			<if test="parentId != null">
+				#{parentId,jdbcType=BIGINT},
+			</if>
+			<if test="companyId != null">
+				#{companyId,jdbcType=BIGINT},
+			</if>
+			<if test="mobilePhone != null">
+				#{mobilePhone,jdbcType=VARCHAR},
+			</if>
+			<if test="email != null">
+				#{email,jdbcType=VARCHAR},
+			</if>
+			<if test="addTime != null">
+				#{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=INTEGER},
+			</if>
+			<if test="description != null">
+				#{description,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.treasure.model.UserExample"
+		resultType="java.lang.Integer">
+		select count(*) from btools_user
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update btools_user
+		<set>
+			<if test="record.userId != null">
+				user_id = #{record.userId,jdbcType=BIGINT},
+			</if>
+			<if test="record.fullName != null">
+				full_name = #{record.fullName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.userName != null">
+				user_name = #{record.userName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.jobNo != null">
+				job_no = #{record.jobNo,jdbcType=VARCHAR},
+			</if>
+			<if test="record.password != null">
+				password = #{record.password,jdbcType=VARCHAR},
+			</if>
+			<if test="record.userType != null">
+				user_type = #{record.userType,jdbcType=INTEGER},
+			</if>
+			<if test="record.parentId != null">
+				parent_id = #{record.parentId,jdbcType=BIGINT},
+			</if>
+			<if test="record.companyId != null">
+				company_id = #{record.companyId,jdbcType=BIGINT},
+			</if>
+			<if test="record.mobilePhone != null">
+				mobile_phone = #{record.mobilePhone,jdbcType=VARCHAR},
+			</if>
+			<if test="record.email != null">
+				email = #{record.email,jdbcType=VARCHAR},
+			</if>
+			<if test="record.addTime != null">
+				add_time = #{record.addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.status != null">
+				status = #{record.status,jdbcType=INTEGER},
+			</if>
+			<if test="record.description != null">
+				description = #{record.description,jdbcType=VARCHAR},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update btools_user
+		set user_id = #{record.userId,jdbcType=BIGINT},
+		full_name = #{record.fullName,jdbcType=VARCHAR},
+		user_name =
+		#{record.userName,jdbcType=VARCHAR},
+		job_no =
+		#{record.jobNo,jdbcType=VARCHAR},
+		password =
+		#{record.password,jdbcType=VARCHAR},
+		user_type =
+		#{record.userType,jdbcType=INTEGER},
+		parent_id =
+		#{record.parentId,jdbcType=BIGINT},
+		company_id =
+		#{record.companyId,jdbcType=BIGINT},
+		mobile_phone =
+		#{record.mobilePhone,jdbcType=VARCHAR},
+		email =
+		#{record.email,jdbcType=VARCHAR},
+		add_time =
+		#{record.addTime,jdbcType=TIMESTAMP},
+		status =
+		#{record.status,jdbcType=INTEGER},
+		description =
+		#{record.description,jdbcType=VARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.treasure.model.User">
+		update btools_user
+		<set>
+			<if test="fullName != null">
+				full_name = #{fullName,jdbcType=VARCHAR},
+			</if>
+			<if test="userName != null">
+				user_name = #{userName,jdbcType=VARCHAR},
+			</if>
+			<if test="jobNo != null">
+				job_no = #{jobNo,jdbcType=VARCHAR},
+			</if>
+			<if test="password != null">
+				password = #{password,jdbcType=VARCHAR},
+			</if>
+			<if test="userType != null">
+				user_type = #{userType,jdbcType=INTEGER},
+			</if>
+			<if test="parentId != null">
+				parent_id = #{parentId,jdbcType=BIGINT},
+			</if>
+			<if test="companyId != null">
+				company_id = #{companyId,jdbcType=BIGINT},
+			</if>
+			<if test="mobilePhone != null">
+				mobile_phone = #{mobilePhone,jdbcType=VARCHAR},
+			</if>
+			<if test="email != null">
+				email = #{email,jdbcType=VARCHAR},
+			</if>
+			<if test="addTime != null">
+				add_time = #{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=INTEGER},
+			</if>
+			<if test="description != null">
+				description = #{description,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where user_id = #{userId,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.treasure.model.User">
+		update
+		btools_user
+		set full_name = #{fullName,jdbcType=VARCHAR},
+		user_name
+		=
+		#{userName,jdbcType=VARCHAR},
+		job_no = #{jobNo,jdbcType=VARCHAR},
+		password = #{password,jdbcType=VARCHAR},
+		user_type =
+		#{userType,jdbcType=INTEGER},
+		parent_id = #{parentId,jdbcType=BIGINT},
+		company_id = #{companyId,jdbcType=BIGINT},
+		mobile_phone =
+		#{mobilePhone,jdbcType=VARCHAR},
+		email = #{email,jdbcType=VARCHAR},
+		add_time = #{addTime,jdbcType=TIMESTAMP},
+		status =
+		#{status,jdbcType=INTEGER},
+		description =
+		#{description,jdbcType=VARCHAR}
+		where user_id =
+		#{userId,jdbcType=BIGINT}
+	</update>
+	<!-- 查询企业用户总条数 -->
+	<select id="selectTotalRecord" resultType="java.lang.Integer">
+		select count(user_id)
+		from btools_user
+		where <![CDATA[ user_type <> 0]]>
+		<if test="user!=null">
+			<if test="user.userName != null and user.userName !='' ">
+				and user_name like
+				"%"#{user.userName,jdbcType=VARCHAR}"%"
+			</if>
+			<if test="user.jobNo != null and user.jobNo !='' ">
+				and job_no like
+				"%"#{user.jobNo,jdbcType=VARCHAR}"%"
+			</if>
+			<if test="user.fullName != null and user.fullName !='' ">
+				and full_name like
+				"%"#{user.fullName,jdbcType=VARCHAR}"%"
+			</if>
+			<if test="user.mobilePhone != null and user.mobilePhone !='' ">
+				and mobile_phone like
+				"%"#{user.mobilePhone,jdbcType=VARCHAR}"%"
+			</if>
+			<if test="user.companyId !=null and user.companyId !='' ">
+				and
+				company_id=#{user.companyId,jdbcType=BIGINT}
+			</if>
+		</if>
+	</select>
+	<!-- 查询表企业用户所有数据 -->
+	<select id="selectList" resultMap="BaseResultMap">
+		select *
+		from btools_user
+		where <![CDATA[ user_type <> 0]]>
+		<if test="user!=null">
+			<if test="user.userName != null and user.userName !='' ">
+				and user_name like
+				"%"#{user.userName,jdbcType=VARCHAR}"%"
+			</if>
+			<if test="user.jobNo != null and user.jobNo !='' ">
+				and job_no like
+				"%"#{user.jobNo,jdbcType=VARCHAR}"%"
+			</if>
+			<if test="user.fullName != null and user.fullName !='' ">
+				and full_name like
+				"%"#{user.fullName,jdbcType=VARCHAR}"%"
+			</if>
+			<if test="user.mobilePhone != null and user.mobilePhone !='' ">
+				and mobile_phone like
+				"%"#{user.mobilePhone,jdbcType=VARCHAR}"%"
+			</if>
+			<if test="user.companyId !=null and user.companyId !='' ">
+				and
+				company_id=#{user.companyId,jdbcType=BIGINT}
+			</if>
+		</if>
+		<if test="pageVo !=null"><!-- 判断pageVo对象是否为空 -->
+			<if test="pageVo.sortField !=null  and pageVo.sortOrder !=null">
+				order by
+				${pageVo.sortField} ${pageVo.sortOrder}
+			</if>
+			<if test="pageVo.pageIndex >=0  and pageVo.pageSize >0">
+				limit
+				#{pageVo.pageIndex,jdbcType=INTEGER},#{pageVo.pageSize,jdbcType=INTEGER}
+			</if>
+		</if>
+	</select>
+	<select id="selectRoleByUserId" resultMap="RoleResultMap"
+		parameterType="java.lang.Integer">
+		select role_id,role_name,company_id from
+		btools_role
+		where role_id
+		in(select role_id from
+		btools_user_role where
+		user_id=#{userId,jdbcType=BIGINT})
+	</select>
+	<!-- 验证用户名 -->
+	<select id="selectByUserName" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from btools_user
+		where user_name = #{userName,jdbcType=VARCHAR}
+	</select>
+	<!-- 批量删除用户信息 -->
+	<delete id="deleteUserByKey" parameterType="java.util.List">
+		delete from btools_user where user_id in
+		<foreach collection="list" index="index" item="item" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	<select id="selectUserByName" resultMap="BaseResultMap">
+		select * from
+		btools_user WHERE ( user_name = #{userName,jdbcType=VARCHAR} or
+		full_name = #{userName,jdbcType=VARCHAR})
+	</select>
+</mapper>

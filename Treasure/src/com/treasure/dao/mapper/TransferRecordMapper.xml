@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.treasure.dao.TransferRecordMapper">
+	<resultMap id="TransferRecordMap" type="com.treasure.model.TransferRecord">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="full_name" property="fullName" jdbcType="VARCHAR" />
+		<result column="mobile" property="mobile" jdbcType="VARCHAR" />
+		<result column="password" property="password" jdbcType="VARCHAR" />
+		<result column="ad_code" property="adCode" jdbcType="VARCHAR" />
+		<result column="money" property="money" jdbcType="DOUBLE" />
+		<result column="integral" property="integral" jdbcType="DOUBLE" />
+		<result column="status" property="status" jdbcType="TINYINT" />
+		<result column="id_card" property="idCard" jdbcType="VARCHAR" />
+		<result column="uuid" property="uuid" jdbcType="VARCHAR" />
+		<result column="amount" property="amount" jdbcType="DOUBLE" />
+		<result column="time" property="time" jdbcType="VARCHAR" />
+		<result column="username" property="userName" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	
+	<sql id="columns">
+			id,
+			full_name,
+			
+			mobile,
+			password,
+			ad_code,
+			money,
+			integral,
+			status,
+			id_card,
+			uuid
+	</sql>
+	
+	
+	<!-- where sql -->
+	<sql id="where_sql">
+		 
+		 <if test="record!=null">
+			<if test="(record.id!=null and record.id!='') or  (record.id!='' and record.id==0)  ">
+				and id  = #{record.id} 
+			</if>
+			<if test="(record.fullName!=null and record.fullName!='') or  (record.fullName!='' and record.fullName==0)  ">
+				and full_name  = #{record.fullName} 
+			</if>
+			
+		</if>
+		 
+	</sql>
+	
+	
+	<select id="selectInPage" resultMap="TransferRecordMap">
+		select 
+		m.id,
+		m.full_name,
+		m.username,
+		t.time,
+		
+		(
+		SELECT
+			f.uuid
+		FROM
+			treasure_member f
+		WHERE
+			f.id = t.buyer_member_id
+		) uuid,
+		
+		t.amount
+		from treasure_member m LEFT JOIN treasure_trade t 
+		on m.id = t.seller_member_id   
+		where 1=1 
+		and t.status='1'
+		and t.type ='3'
+		<if test="(record.fullName!=null and record.fullName!='') or  (record.fullName!='' and record.fullName==0)  ">
+				and m.full_name like
+				"%"#{record.fullName,jdbcType=VARCHAR}"%"
+		</if>
+		<if test="(record.userName!=null and record.userName!='') or  (record.userName!='' and record.userName==0)  ">
+				and m.userName like
+				"%"#{record.userName,jdbcType=VARCHAR}"%"
+		</if>
+		
+		<if test="pageInfo !=null">
+			ORDER BY t.time DESC 
+			<if test="pageInfo.pageIndex >=0  and pageInfo.pageSize >0">
+				limit
+				#{pageInfo.pageIndex},#{pageInfo.pageSize} 
+			</if>
+			
+		</if>
+	</select>
+	
+	
+	<select id="selectInPage1" resultMap="TransferRecordMap">
+		SELECT
+			m.id,
+			m.full_name,
+			m.username,
+			t.time,
+			t.amount,
+			(
+				SELECT
+					f.uuid
+				FROM
+					treasure_member f
+				WHERE
+					f.id = t.seller_member_id
+			) uuid
+		FROM
+			treasure_member m
+		RIGHT JOIN treasure_trade t ON m.id = t.buyer_member_id
+		WHERE
+			1 = 1
+		AND t. STATUS = '1' 
+		and t.type ='3'
+		
+		
+		<if test="(record.fullName!=null and record.fullName!='') or  (record.fullName!='' and record.fullName==0)  ">
+				and m.full_name like
+				"%"#{record.fullName,jdbcType=VARCHAR}"%"
+		</if>
+		<if test="(record.userName!=null and record.userName!='') or  (record.userName!='' and record.userName==0)  ">
+				and m.userName like
+				"%"#{record.userName,jdbcType=VARCHAR}"%"
+		</if>
+		
+		<if test="pageInfo !=null">
+			ORDER BY t.time DESC 
+			<if test="pageInfo.pageIndex >=0  and pageInfo.pageSize >0">
+				limit
+				#{pageInfo.pageIndex},#{pageInfo.pageSize} 
+			</if>
+			
+		</if>
+	</select>
+	
+	
+	
+	
+	<select id="selectTotalRecord"  resultType="java.lang.Integer">
+	select count(*)
+	from treasure_member m LEFT JOIN treasure_trade t 
+		on m.id = t.buyer_member_id   
+		where 1=1 
+		and t.status='1'  
+		and t.type ='3'
+		<if test="(record.fullName!=null and record.fullName!='') or  (record.fullName!='' and record.fullName==0)  ">
+				and m.full_name like
+				"%"#{record.fullName,jdbcType=VARCHAR}"%"
+		</if>
+		<if test="(record.userName!=null and record.userName!='') or  (record.userName!='' and record.userName==0)  ">
+				and m.userName like
+				"%"#{record.userName,jdbcType=VARCHAR}"%"
+		</if>
+	</select>
+	<select id="selectTotalRecord1"  resultType="java.lang.Integer">
+	select count(*)
+	from treasure_member m LEFT JOIN treasure_trade t 
+		on m.id = t.seller_member_id   
+		where 1=1 
+		and t.status='1'  
+		and t.type ='3'
+		<if test="(record.fullName!=null and record.fullName!='') or  (record.fullName!='' and record.fullName==0)  ">
+				and m.full_name like
+				"%"#{record.fullName,jdbcType=VARCHAR}"%"
+		</if>
+		<if test="(record.userName!=null and record.userName!='') or  (record.userName!='' and record.userName==0)  ">
+				and m.userName like
+				"%"#{record.userName,jdbcType=VARCHAR}"%"
+		</if>
+	</select>
+</mapper>

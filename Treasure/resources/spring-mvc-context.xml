@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.2.xsd 
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd">
+	<!--数据库配置信息导入 -->
+	<beans:import resource="classpath:spring-beans-common.xml" />
+	<!--注入类扫描设置 -->
+	<context:annotation-config />
+	<context:component-scan base-package="com.treasure.controller" />
+	<mvc:annotation-driven />
+	<!--静态文件读取映射 -->
+	<mvc:resources location="/include/assets/**" mapping="/assets/**" />
+	<mvc:resources location="/include/css/**" mapping="/css/**" />
+	<mvc:resources location="/include/images/**" mapping="/images/**" />
+	<mvc:resources location="/include/js/**" mapping="/js/**" />
+	<mvc:resources location="/include/json/**" mapping="/json/**" />
+	<mvc:resources location="/include/plugins/**" mapping="/plugins/**" />
+	<mvc:resources location="/include/file/**" mapping="/file/**" />
+	<!--首页导向设置 -->
+	<!-- <mvc:view-controller path="/" view-name="tohome" /> -->
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/views/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+	<bean
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<!-- 系统配置 -->
+				<value>classpath:config.properties</value>
+				<value>classpath:jdbc.properties</value>
+			</list>
+		</property>
+		<property name="fileEncoding">
+			<value>UTF-8</value>
+		</property>
+	</bean>
+	<!-- 文件上传 -->
+	<!-- SpringMVC上传文件时,需配置MultipartResolver处理器 -->
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- 指定所上传文件的总大小不能超过80M......注意maxUploadSize属性的限制不是针对单个文件,而是所有文件的容量之和 -->
+		<property name="maxUploadSize" value="80000000" />
+	</bean>
+	<!-- SpringMVC在超出上传文件限制时,会抛出org.springframework.web.multipart.MaxUploadSizeExceededException -->
+	<!-- 该异常是SpringMVC在检查上传的文件信息时抛出来的,而且此时还没有进入到Controller方法中 -->
+	<bean id="exceptionResolver"
+		class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+		<property name="exceptionMappings">
+			<props>
+				<!-- 遇到MaxUploadSizeExceededException异常时,自动跳转到/WEB-INF/jsp/error_fileupload.jsp页面 -->
+				<prop
+					key="org.springframework.web.multipart.MaxUploadSizeExceededException">error_fileupload</prop>
+			</props>
+		</property>
+	</bean>
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.treasure.dao" />
+	</bean>
+	<!-- 文件上传 -->
+	<!-- 增加定时任务插件 -->
+	<context:annotation-config></context:annotation-config>
+	<!-- spring 扫描注解配置 -->
+	<context:component-scan base-package="com.garage.scheduled">
+	</context:component-scan>
+	<!-- 开启这个配置 spring才能识别@Scheduled注解 -->
+	<task:annotation-driven />
+</beans>

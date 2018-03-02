@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.treasure.dao.FunctionMapper">
+	<resultMap id="BaseResultMap" type="com.treasure.model.Function">
+		<id column="function_id" property="functionId" jdbcType="INTEGER" />
+		<result column="type" property="type" jdbcType="INTEGER" />
+		<result column="function_name" property="functionName"
+			jdbcType="VARCHAR" />
+		<result column="code" property="code" jdbcType="VARCHAR" />
+		<result column="description" property="description" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		function_id, type, function_name, code, description
+	</sql>
+	<select id="selectByExample" resultMap="BaseResultMap"
+		parameterType="com.treasure.model.FunctionExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from btools_function
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from btools_function
+		where function_id =
+		#{functionId,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from
+		btools_function
+		where function_id = #{functionId,jdbcType=INTEGER}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.treasure.model.FunctionExample">
+		delete from btools_function
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.treasure.model.Function">
+		insert into
+		btools_function (function_id, type, function_name,
+		code,
+		description)
+		values (#{functionId,jdbcType=INTEGER},
+		#{type,jdbcType=INTEGER},
+		#{functionName,jdbcType=VARCHAR},
+		#{code,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.treasure.model.Function">
+		insert into btools_function
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="functionId != null">
+				function_id,
+			</if>
+			<if test="type != null">
+				type,
+			</if>
+			<if test="functionName != null">
+				function_name,
+			</if>
+			<if test="code != null">
+				code,
+			</if>
+			<if test="description != null">
+				description,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="functionId != null">
+				#{functionId,jdbcType=INTEGER},
+			</if>
+			<if test="type != null">
+				#{type,jdbcType=INTEGER},
+			</if>
+			<if test="functionName != null">
+				#{functionName,jdbcType=VARCHAR},
+			</if>
+			<if test="code != null">
+				#{code,jdbcType=VARCHAR},
+			</if>
+			<if test="description != null">
+				#{description,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.treasure.model.FunctionExample"
+		resultType="java.lang.Integer">
+		select count(*) from btools_function
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update btools_function
+		<set>
+			<if test="record.functionId != null">
+				function_id = #{record.functionId,jdbcType=INTEGER},
+			</if>
+			<if test="record.type != null">
+				type = #{record.type,jdbcType=INTEGER},
+			</if>
+			<if test="record.functionName != null">
+				function_name = #{record.functionName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.code != null">
+				code = #{record.code,jdbcType=VARCHAR},
+			</if>
+			<if test="record.description != null">
+				description = #{record.description,jdbcType=VARCHAR},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update btools_function
+		set function_id =
+		#{record.functionId,jdbcType=INTEGER},
+		type =
+		#{record.type,jdbcType=INTEGER},
+		function_name =
+		#{record.functionName,jdbcType=VARCHAR},
+		code =
+		#{record.code,jdbcType=VARCHAR},
+		description =
+		#{record.description,jdbcType=VARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.treasure.model.Function">
+		update btools_function
+		<set>
+			<if test="type != null">
+				type = #{type,jdbcType=INTEGER},
+			</if>
+			<if test="functionName != null">
+				function_name = #{functionName,jdbcType=VARCHAR},
+			</if>
+			<if test="code != null">
+				code = #{code,jdbcType=VARCHAR},
+			</if>
+			<if test="description != null">
+				description = #{description,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where function_id = #{functionId,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.treasure.model.Function">
+		update
+		btools_function
+		set type = #{type,jdbcType=INTEGER},
+		function_name =
+		#{functionName,jdbcType=VARCHAR},
+		code = #{code,jdbcType=VARCHAR},
+		description = #{description,jdbcType=VARCHAR}
+		where function_id =
+		#{functionId,jdbcType=INTEGER}
+	</update>
+	<!-- 查询满足条件的记录数 -->
+	<select id="selectTotalRecord" resultType="java.lang.Integer">
+		select count(function_id)
+		from btools_function
+		where 1=1
+		<if test="function!=null">
+			<if test="function.functionName !=null and function.functionName !='' ">
+				and
+				function_name=#{function.functionName,jdbcType=VARCHAR}
+			</if>
+			<if test="function.code !=null and function.code !='' ">
+				and code=#{function.code,jdbcType=VARCHAR}
+			</if>
+		</if>
+	</select>
+	<select id="selectList" resultMap="BaseResultMap">
+		select *
+		from btools_function
+		where 1=1
+		<if test="function!=null">
+			<if test="function.functionName !=null and function.functionName !='' ">
+				and
+				function_name=#{function.functionName,jdbcType=VARCHAR}
+			</if>
+			<if test="function.code !=null and function.code !='' ">
+				and code=#{function.code,jdbcType=VARCHAR}
+			</if>
+		</if>
+		<if test="pageVo !=null"><!-- 判断pageVo对象是否为空 -->
+			<if test="pageVo.sortField !=null  and pageVo.sortOrder !=null">
+				order by
+				${pageVo.sortField} ${pageVo.sortOrder}
+			</if>
+			<if test="pageVo.pageIndex >=0  and pageVo.pageSize >0">
+				limit
+				#{pageVo.pageIndex,jdbcType=INTEGER},#{pageVo.pageSize,jdbcType=INTEGER}
+			</if>
+		</if>
+	</select>
+	<!-- 批量删除 -->
+	<delete id="deleteFunctionByKey" parameterType="java.util.List">
+		delete from btools_function where function_id in
+		<foreach collection="list" index="index" item="item" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+</mapper>

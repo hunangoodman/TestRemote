@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.treasure.dao.IncomeMapper">
+<resultMap id="BaseResultMap" type="com.treasure.model.InestmentIncome">
+	<id column="income_id" property="incomeId" />
+	<result column="investment_id" property="investmentId" />
+	<result column="member_id" property="memberId" />
+	<result column="financialmanagement" property="financialmanagement" />
+	<result column="total_money"   property="totalMoney" />
+	<result column="income_money"  property="incomeMoney" />
+	<result column="income_type"  property="incomeType" />
+	<result column="create_time"   property="createTime" />
+</resultMap>
+	<!--根据Id插入投资金额  -->
+	<insert id="insertInestment" parameterType="com.treasure.model.InestmentIncome">
+		insert into treasure_inestment_income
+		(investment_id,
+		 total_money,
+		 member_id,
+		 financialmanagement,
+		 income_money,
+		 income_type
+		 ) 
+		values(
+		 #{record.investmentId},
+		 #{record.totalMoney},
+		 #{record.memberId},
+		 #{record.financialmanagement},
+		 #{record.incomeMoney},
+		 #{record.incomeType}
+		)
+	</insert>
+	<!--根据ID查询投资记录  -->
+	<select id="selectInterestRate" resultMap="BaseResultMap">
+		select * from treasure_inestment_income where investment_id = #{record.investmentId} and income_type = #{record.incomeType}
+	</select>
+	
+	
+	
+	<select id="selectInterestAll" resultMap="BaseResultMap">
+		select investment_id,member_id,total_money,financialmanagement,total_money,income_money,income_type,create_time from treasure_inestment_income
+	</select>
+	
+	<!--根据ID修改投资金额  -->
+	<update id="updateInterst" parameterType="com.treasure.model.InestmentIncome">
+		update treasure_inestment_income  
+		set
+		<if test="record.totalMoney!=0 or record.totalMoney!=null ">
+				total_money = #{record.totalMoney}
+		</if>
+		<if test="record.incomeType!=0 or record.incomeType!=null ">
+				income_type = #{record.incomeType}
+		</if>
+		where investment_id = #{record.investmentId}
+	</update>
+	
+</mapper>

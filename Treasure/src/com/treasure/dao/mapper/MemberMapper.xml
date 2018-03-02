@@ -1,0 +1,1205 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.treasure.dao.MemberMapper">
+	<resultMap id="BaseResultMap" type="com.treasure.model.Member">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="full_name" property="fullName" jdbcType="VARCHAR" />
+		<result column="mobile" property="mobile" jdbcType="VARCHAR" />
+		<result column="password" property="password" jdbcType="VARCHAR" />
+		<result column="ad_code" property="adCode" jdbcType="VARCHAR" />
+		<result column="money" property="money" jdbcType="DOUBLE" />
+		<result column="integral" property="integral" jdbcType="DOUBLE" />
+		<result column="freeze_integral" property="freezeIntegral"
+			jdbcType="DOUBLE" />
+		<result column="silver" property="silver" jdbcType="DOUBLE" />
+		<result column="consume_bean" property="consumeBean" jdbcType="DOUBLE" />
+		<result column="status" property="status" jdbcType="TINYINT" />
+		<result column="verified_status" property="verifiedStatus"
+			jdbcType="TINYINT" />
+		<result column="address" property="address" jdbcType="VARCHAR" />
+		<result column="card_number" property="cardNumber" jdbcType="VARCHAR" />
+		<result column="id_card" property="idCard" jdbcType="VARCHAR" />
+		<result column="head" property="head" jdbcType="VARCHAR" />
+		<result column="positive_photo" property="positivePhoto"
+			jdbcType="VARCHAR" />
+		<result column="negative_photo" property="negativePhoto"
+			jdbcType="VARCHAR" />
+		<result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+		<result column="activate_status" property="activateStatus"
+			jdbcType="TINYINT" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+		<result column="thaw_date" property="thawDate" jdbcType="DATE" />
+		<result column="bank" property="bank" jdbcType="VARCHAR" />
+		<result column="recomm_money" property="recommMoney" jdbcType="DOUBLE" />
+		<result column="recommend_money" property="recommendMoney"
+			jdbcType="DOUBLE" />
+		<result column="zone" property="zone" jdbcType="VARCHAR" />
+		<result column="quantity" property="quantity" jdbcType="INTEGER" />
+		<result column="total" property="total" jdbcType="INTEGER" />
+		<result column="dyTotal" property="dyTotal" jdbcType="INTEGER" />
+		<result column="uuid" property="uuid" jdbcType="VARCHAR" />
+		<result column="password_two" property="passwordTwo" jdbcType="VARCHAR" />
+		<result column="connection" property="connection" jdbcType="VARCHAR" />
+		<result column="mycode" property="mycode" jdbcType="VARCHAR" />
+		<result column="username" property="userName" jdbcType="VARCHAR"/>
+	</resultMap>
+	<resultMap type="com.treasure.model.Member" id="IncomeResultMap"
+		extends="BaseResultMap">
+		<result column="income" property="yesterdayIncome" jdbcType="DOUBLE" />
+		<result column="totalIncome" property="totalIncome" jdbcType="DOUBLE" />
+		<result column="totalIntegral" property="totalIntegral"
+			jdbcType="DOUBLE" />
+		<result column="aNum" property="aNum" jdbcType="INTEGER" />
+		<result column="bNum" property="bNum" jdbcType="INTEGER" />
+		<result column="aCount" property="aCount" jdbcType="DOUBLE" />
+		<result column="bCount" property="bCount" jdbcType="DOUBLE" />
+		<result column="username" property="userName" jdbcType="VARCHAR"/>
+	</resultMap>
+	<resultMap type="com.treasure.model.Member" id="RecommendMap"
+		extends="BaseResultMap">
+		<result column="recommend_num" property="recommendNum"
+			jdbcType="INTEGER" />
+	</resultMap>
+	<resultMap type="com.treasure.model.Member" id="RateMap">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="rate" property="rate" jdbcType="DOUBLE" />
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, full_name, mobile, password, ad_code, money, integral,
+		freeze_integral, silver,
+		consume_bean, status, verified_status,
+		address, card_number, id_card, head,
+		positive_photo,
+		negative_photo,CONCAT('ZLZC',id) mycode,
+		add_time, activate_status, remark, thaw_date, bank, recommend_money,zone,uuid,password_two,connection
+	</sql>
+	
+	<update id="addEncode" parameterType="String">
+	update treasure_member set code_path=#{name} where id=#{mid}
+	</update>
+	
+	<select id="findEncodeById" parameterType="String" resultType="String">
+	select code_path from treasure_member where id=#{memberid}
+	</select>
+	
+	<select id="findMoneyEncodeById" parameterType="String" resultType="String">
+	select money_code_path from treasure_member where id=#{memberid}
+	</select>
+	
+	<select id="selectByExample" resultMap="BaseResultMap"
+		parameterType="com.treasure.model.MemberExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from treasure_member
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from treasure_member
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from
+		treasure_member
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.treasure.model.MemberExample">
+		delete from treasure_member
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	
+	<update id="addMoneyEncode" parameterType="String">
+		update treasure_member set money_code_path=#{name} where id=#{mid}
+	</update>
+	
+	<insert id="insert" parameterType="com.treasure.model.Member">
+		insert into treasure_member
+		(id, full_name, mobile,
+		password, ad_code, money,
+		integral,
+		freeze_integral, silver,
+		consume_bean, status, verified_status,
+		address, card_number, id_card,
+		head, positive_photo, negative_photo,
+		add_time, activate_status, remark,
+		thaw_date, bank, recommend_money,zone,uuid,password_two,connection
+		)
+		values (#{id,jdbcType=BIGINT}, #{fullName,jdbcType=VARCHAR},
+		#{mobile,jdbcType=VARCHAR},
+		#{password,jdbcType=VARCHAR},
+		#{adCode,jdbcType=VARCHAR}, #{money,jdbcType=DOUBLE},
+		#{integral,jdbcType=DOUBLE}, #{freezeIntegral,jdbcType=DOUBLE},
+		#{silver,jdbcType=DOUBLE},
+		#{consumeBean,jdbcType=DOUBLE},
+		#{status,jdbcType=TINYINT}, #{verifiedStatus,jdbcType=TINYINT},
+		#{address,jdbcType=VARCHAR}, #{cardNumber,jdbcType=VARCHAR},
+		#{idCard,jdbcType=VARCHAR},
+		#{head,jdbcType=VARCHAR},
+		#{positivePhoto,jdbcType=VARCHAR}, #{negativePhoto,jdbcType=VARCHAR},
+		#{addTime,jdbcType=TIMESTAMP}, #{activateStatus,jdbcType=TINYINT},
+		#{remark,jdbcType=VARCHAR},
+		#{thawDate,jdbcType=DATE},
+		#{bank,jdbcType=VARCHAR}, #{recommendMoney,jdbcType=DOUBLE},
+		#{zone,jdbcType=VARCHAR},
+		#{uuid,jdbcType=VARCHAR},
+		#{passwordTwo,jdbcType=VARCHAR},
+		#{connection,jdbcType=VARCHAR}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.treasure.model.Member">
+		insert into treasure_member
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="fullName != null">
+				full_name,
+			</if>
+			<if test="mobile != null">
+				mobile,
+			</if>
+			<if test="password != null">
+				password,
+			</if>
+			<if test="adCode != null">
+				ad_code,
+			</if>
+			<if test="money != null">
+				money,
+			</if>
+			<if test="integral != null">
+				integral,
+			</if>
+			<if test="freezeIntegral != null">
+				freeze_integral,
+			</if>
+			<if test="silver != null">
+				silver,
+			</if>
+			<if test="consumeBean != null">
+				consume_bean,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="verifiedStatus != null">
+				verified_status,
+			</if>
+			<if test="address != null">
+				address,
+			</if>
+			<if test="cardNumber != null">
+				card_number,
+			</if>
+			<if test="idCard != null">
+				id_card,
+			</if>
+			<if test="head != null">
+				head,
+			</if>
+			<if test="positivePhoto != null">
+				positive_photo,
+			</if>
+			<if test="negativePhoto != null">
+				negative_photo,
+			</if>
+			<if test="addTime != null">
+				add_time,
+			</if>
+			<if test="activateStatus != null">
+				activate_status,
+			</if>
+			<if test="remark != null">
+				remark,
+			</if>
+			<if test="thawDate != null">
+				thaw_date,
+			</if>
+			<if test="bank != null">
+				bank,
+			</if>
+			<if test="recommendMoney != null">
+				recommend_money,
+			</if>
+			<if test="zone != null">
+				zone,
+			</if>
+			<if test="uuid != null">
+				uuid,
+			</if>
+			<if test="passwordTwo != null">
+				password_two,
+			</if>
+			<if test="connection != null">
+				connection,
+			</if>
+			<if test="userName != null or userName!='' " >
+				username,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="fullName != null">
+				#{fullName,jdbcType=VARCHAR},
+			</if>
+			<if test="mobile != null">
+				#{mobile,jdbcType=VARCHAR},
+			</if>
+			<if test="password != null">
+				#{password,jdbcType=VARCHAR},
+			</if>
+			<if test="adCode != null">
+				#{adCode,jdbcType=VARCHAR},
+			</if>
+			<if test="money != null">
+				#{money,jdbcType=DOUBLE},
+			</if>
+			<if test="integral != null">
+				#{integral,jdbcType=DOUBLE},
+			</if>
+			<if test="freezeIntegral != null">
+				#{freezeIntegral,jdbcType=DOUBLE},
+			</if>
+			<if test="silver != null">
+				#{silver,jdbcType=DOUBLE},
+			</if>
+			<if test="consumeBean != null">
+				#{consumeBean,jdbcType=DOUBLE},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=TINYINT},
+			</if>
+			<if test="verifiedStatus != null">
+				#{verifiedStatus,jdbcType=TINYINT},
+			</if>
+			<if test="address != null">
+				#{address,jdbcType=VARCHAR},
+			</if>
+			<if test="cardNumber != null">
+				#{cardNumber,jdbcType=VARCHAR},
+			</if>
+			<if test="idCard != null">
+				#{idCard,jdbcType=VARCHAR},
+			</if>
+			<if test="head != null">
+				#{head,jdbcType=VARCHAR},
+			</if>
+			<if test="positivePhoto != null">
+				#{positivePhoto,jdbcType=VARCHAR},
+			</if>
+			<if test="negativePhoto != null">
+				#{negativePhoto,jdbcType=VARCHAR},
+			</if>
+			<if test="addTime != null">
+				#{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="activateStatus != null">
+				#{activateStatus,jdbcType=TINYINT},
+			</if>
+			<if test="remark != null">
+				#{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="thawDate != null">
+				#{thawDate,jdbcType=DATE},
+			</if>
+			<if test="bank != null">
+				#{bank,jdbcType=VARCHAR},
+			</if>
+			<if test="recommendMoney != null">
+				#{recommendMoney,jdbcType=DOUBLE},
+			</if>
+			<if test="zone != null">
+				#{zone,jdbcType=VARCHAR},
+			</if>
+			<if test="uuid != null">
+				#{uuid,jdbcType=VARCHAR},
+			</if>
+			<if test="passwordTwo != null">
+				#{passwordTwo,jdbcType=VARCHAR},
+			</if>
+			<if test="connection != null">
+				#{connection,jdbcType=VARCHAR},
+			</if>
+			<if test="userName != null or userName !=''">
+				#{userName,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.treasure.model.MemberExample"
+		resultType="java.lang.Integer">
+		select count(*) from treasure_member
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update treasure_member
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.fullName != null">
+				full_name = #{record.fullName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.mobile != null">
+				mobile = #{record.mobile,jdbcType=VARCHAR},
+			</if>
+			<if test="record.password != null">
+				password = #{record.password,jdbcType=VARCHAR},
+			</if>
+			<if test="record.adCode != null">
+				ad_code = #{record.adCode,jdbcType=VARCHAR},
+			</if>
+			<if test="record.money != null">
+				money = #{record.money,jdbcType=DOUBLE},
+			</if>
+			<if test="record.integral != null">
+				integral = #{record.integral,jdbcType=DOUBLE},
+			</if>
+			<if test="record.freezeIntegral != null">
+				freeze_integral =
+				#{record.freezeIntegral,jdbcType=DOUBLE},
+			</if>
+			<if test="record.silver != null">
+				silver = #{record.silver,jdbcType=DOUBLE},
+			</if>
+			<if test="record.consumeBean != null">
+				consume_bean = #{record.consumeBean,jdbcType=DOUBLE},
+			</if>
+			<if test="record.status != null">
+				status = #{record.status,jdbcType=TINYINT},
+			</if>
+			<if test="record.verifiedStatus != null">
+				verified_status =
+				#{record.verifiedStatus,jdbcType=TINYINT},
+			</if>
+			<if test="record.address != null">
+				address = #{record.address,jdbcType=VARCHAR},
+			</if>
+			<if test="record.cardNumber != null">
+				card_number = #{record.cardNumber,jdbcType=VARCHAR},
+			</if>
+			<if test="record.idCard != null">
+				id_card = #{record.idCard,jdbcType=VARCHAR},
+			</if>
+			<if test="record.head != null">
+				head = #{record.head,jdbcType=VARCHAR},
+			</if>
+			<if test="record.positivePhoto != null">
+				positive_photo =
+				#{record.positivePhoto,jdbcType=VARCHAR},
+			</if>
+			<if test="record.negativePhoto != null">
+				negative_photo =
+				#{record.negativePhoto,jdbcType=VARCHAR},
+			</if>
+			<if test="record.addTime != null">
+				add_time = #{record.addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.activateStatus != null">
+				activate_status =
+				#{record.activateStatus,jdbcType=TINYINT},
+			</if>
+			<if test="record.remark != null">
+				remark = #{record.remark,jdbcType=VARCHAR},
+			</if>
+			<if test="record.thawDate != null">
+				thaw_date = #{record.thawDate,jdbcType=DATE},
+			</if>
+			<if test="record.bank != null">
+				bank = #{record.bank,jdbcType=VARCHAR},
+			</if>
+			<if test="record.recommendMoney != null">
+				recommend_money =
+				#{record.recommendMoney,jdbcType=DOUBLE},
+			</if>
+			<if test="record.zone != null">
+				zone = #{record.zone,jdbcType=VARCHAR},
+			</if>
+			<if test="record.uuid != null">
+				uuid = #{record.uuid=VARCHAR},
+			</if>
+			<if test="record.passwordTwo != null">
+				password_two = #{record.passwordTwo=VARCHAR},
+			</if>
+			<if test="record.connection != null">
+				connection = #{record.connection=VARCHAR},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update treasure_member
+		set id = #{record.id,jdbcType=BIGINT},
+		full_name
+		= #{record.fullName,jdbcType=VARCHAR},
+		mobile =
+		#{record.mobile,jdbcType=VARCHAR},
+		password =
+		#{record.password,jdbcType=VARCHAR},
+		ad_code =
+		#{record.adCode,jdbcType=VARCHAR},
+		money =
+		#{record.money,jdbcType=DOUBLE},
+		integral =
+		#{record.integral,jdbcType=DOUBLE},
+		freeze_integral =
+		#{record.freezeIntegral,jdbcType=DOUBLE},
+		silver =
+		#{record.silver,jdbcType=DOUBLE},
+		consume_bean =
+		#{record.consumeBean,jdbcType=DOUBLE},
+		status =
+		#{record.status,jdbcType=TINYINT},
+		verified_status =
+		#{record.verifiedStatus,jdbcType=TINYINT},
+		address =
+		#{record.address,jdbcType=VARCHAR},
+		card_number =
+		#{record.cardNumber,jdbcType=VARCHAR},
+		id_card =
+		#{record.idCard,jdbcType=VARCHAR},
+		head =
+		#{record.head,jdbcType=VARCHAR},
+		positive_photo =
+		#{record.positivePhoto,jdbcType=VARCHAR},
+		negative_photo =
+		#{record.negativePhoto,jdbcType=VARCHAR},
+		add_time =
+		#{record.addTime,jdbcType=TIMESTAMP},
+		activate_status =
+		#{record.activateStatus,jdbcType=TINYINT},
+		remark =
+		#{record.remark,jdbcType=VARCHAR},
+		thaw_date =
+		#{record.thawDate,jdbcType=DATE},
+		bank =
+		#{record.bank,jdbcType=VARCHAR},
+		recommend_money =
+		#{record.recommendMoney,jdbcType=DOUBLE},
+		zone =
+		#{record.zone,jdbcType=VARCHAR},
+		uuid =
+		#{record.uuid,jdbcType=VARCHAR},
+		password_two =
+		#{record.passwordTwo,jdbcType=VARCHAR},
+		connection =
+		#{record.connection,jdbcType=VARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.treasure.model.Member">
+		update treasure_member
+		<set>
+			<if test="fullName != null">
+				full_name = #{fullName,jdbcType=VARCHAR},
+			</if>
+			<if test="mobile != null">
+				mobile = #{mobile,jdbcType=VARCHAR},
+			</if>
+			<if test="password != null">
+				password = #{password,jdbcType=VARCHAR},
+			</if>
+			<if test="adCode != null">
+				ad_code = #{adCode,jdbcType=VARCHAR},
+			</if>
+			<if test="money != null">
+				money = #{money,jdbcType=DOUBLE},
+			</if>
+			<if test="integral != null">
+				integral = #{integral,jdbcType=DOUBLE},
+			</if>
+			<if test="freezeIntegral != null">
+				freeze_integral = #{freezeIntegral,jdbcType=DOUBLE},
+			</if>
+			<if test="silver != null">
+				silver = #{silver,jdbcType=DOUBLE},
+			</if>
+			<if test="consumeBean != null">
+				consume_bean = #{consumeBean,jdbcType=DOUBLE},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=TINYINT},
+			</if>
+			<if test="verifiedStatus != null">
+				verified_status = #{verifiedStatus,jdbcType=TINYINT},
+			</if>
+			<if test="address != null">
+				address = #{address,jdbcType=VARCHAR},
+			</if>
+			<if test="cardNumber != null">
+				card_number = #{cardNumber,jdbcType=VARCHAR},
+			</if>
+			<if test="idCard != null">
+				id_card = #{idCard,jdbcType=VARCHAR},
+			</if>
+			<if test="head != null">
+				head = #{head,jdbcType=VARCHAR},
+			</if>
+			<if test="positivePhoto != null">
+				positive_photo = #{positivePhoto,jdbcType=VARCHAR},
+			</if>
+			<if test="negativePhoto != null">
+				negative_photo = #{negativePhoto,jdbcType=VARCHAR},
+			</if>
+			<if test="addTime != null">
+				add_time = #{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="activateStatus != null">
+				activate_status = #{activateStatus,jdbcType=TINYINT},
+			</if>
+			<if test="remark != null">
+				remark = #{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="thawDate != null">
+				thaw_date = #{thawDate,jdbcType=DATE},
+			</if>
+			<if test="bank != null">
+				bank = #{bank,jdbcType=VARCHAR},
+			</if>
+			<if test="recommendMoney != null">
+				recommend_money = #{recommendMoney,jdbcType=DOUBLE},
+			</if>
+			<if test="zone != null">
+				zone = #{zone,jdbcType=VARCHAR},
+			</if>
+			<if test="uuid != null">
+				uuid = #{uuid,jdbcType=VARCHAR},
+			</if>
+			<if test="passwordTwo != null">
+				password_two = #{passwordTwo,jdbcType=VARCHAR},
+			</if>
+			<if test="connection != null">
+				connection = #{connection,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.treasure.model.Member">
+		update
+		treasure_member
+		set full_name = #{fullName,jdbcType=VARCHAR},
+		mobile =
+		#{mobile,jdbcType=VARCHAR},
+		password = #{password,jdbcType=VARCHAR},
+		ad_code = #{adCode,jdbcType=VARCHAR},
+		money = #{money,jdbcType=DOUBLE},
+		integral = #{integral,jdbcType=DOUBLE},
+		freeze_integral =
+		#{freezeIntegral,jdbcType=DOUBLE},
+		silver = #{silver,jdbcType=DOUBLE},
+		consume_bean = #{consumeBean,jdbcType=DOUBLE},
+		status =
+		#{status,jdbcType=TINYINT},
+		verified_status =
+		#{verifiedStatus,jdbcType=TINYINT},
+		address =
+		#{address,jdbcType=VARCHAR},
+		card_number =
+		#{cardNumber,jdbcType=VARCHAR},
+		id_card = #{idCard,jdbcType=VARCHAR},
+		head = #{head,jdbcType=VARCHAR},
+		positive_photo =
+		#{positivePhoto,jdbcType=VARCHAR},
+		negative_photo =
+		#{negativePhoto,jdbcType=VARCHAR},
+		add_time =
+		#{addTime,jdbcType=TIMESTAMP},
+		activate_status =
+		#{activateStatus,jdbcType=TINYINT},
+		remark =
+		#{remark,jdbcType=VARCHAR},
+		thaw_date = #{thawDate,jdbcType=DATE},
+		bank
+		= #{bank,jdbcType=VARCHAR},
+		recommend_money =
+		#{recommendMoney,jdbcType=DOUBLE},
+		zone
+		= #{zone,jdbcType=VARCHAR},
+		uuid
+		= #{uuid,jdbcType=VARCHAR},
+		password_two
+		= #{passwordTwo,jdbcType=VARCHAR},
+		connection
+		= #{connection,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<select id="selectMemberByMobile" resultMap="IncomeResultMap">
+		select tm.*,
+		(select
+		sum(income) from treasure_income_record where member_id = tm.id) as
+		totalIncome,
+		(select income from treasure_income_record where member_id
+		= tm.id and
+		record_date=DATE_SUB(curdate(),INTERVAL 1 DAY) ) as income,
+		(tm.integral+tm.freeze_integral+(select CASE WHEN sum(amount) IS NOT
+		NULL THEN sum(amount) ELSE 0 END from
+		treasure_trade where type=2 and
+		status=2 and seller_member_id=tm.id))
+		as totalIntegral
+		from
+		treasure_member tm where username =
+		#{mobile,jdbcType=VARCHAR} limit
+		1
+	</select>
+	<select id="selectMemberByUUid" resultMap="IncomeResultMap">
+		select tm.*,
+		(select
+		sum(income) from treasure_income_record where member_id = tm.id) as
+		totalIncome,
+		(select income from treasure_income_record where member_id
+		= tm.id and
+		record_date=DATE_SUB(curdate(),INTERVAL 1 DAY) ) as income,
+		(tm.integral+tm.freeze_integral+(select CASE WHEN sum(amount) IS NOT
+		NULL THEN sum(amount) ELSE 0 END from
+		treasure_trade where type=2 and
+		status=2 and seller_member_id=tm.id))
+		as totalIntegral
+		from
+		treasure_member tm where uuid =
+		#{uuid,jdbcType=VARCHAR} limit
+		1
+	</select>
+	<update id="updateIntegral">
+		update treasure_member set
+		integral=integral + #{integral,jdbcType=DOUBLE}
+		where id
+		= #{memberId,jdbcType=BIGINT}
+	</update>
+	<select id="selectInviteByAdCode" resultMap="BaseResultMap">
+		select * from
+		treasure_member where ad_code =#{adCode,jdbcType=VARCHAR} order by add_time DESC 
+	</select>
+	<update id="updateByTrade1">
+		update treasure_member set
+		integral=integral +
+		#{trade.amount},money =money-(#{trade.amount}*#{trade.price})
+		where id = #{trade.buyerMemberId,jdbcType=BIGINT}
+	</update>
+	
+	<update id="updateTrueName" parameterType="com.treasure.model.Card">
+	update treasure_member set full_name=#{fullName} where id=#{memberId}
+	</update>
+	
+	<update id="updateByTrade2">
+		update treasure_member set
+		integral=integral -
+		#{trade.amount}
+		<if test="1==trade.status">
+			,money =money+(#{trade.amount}*#{trade.price})
+		</if>
+		where id
+		=#{trade.sellerMemberId,jdbcType=BIGINT}
+	</update>
+	<update id="updateByTrade3">
+		update treasure_member set
+		money
+		=money+(#{trade.amount}*#{trade.price})
+		where id
+		=#{trade.sellerMemberId,jdbcType=BIGINT}
+	</update>
+	<update id="updateByTrade4">
+		update treasure_member set
+		integral=integral -
+		#{trade.amount},money =money+(#{trade.amount}*#{trade.price})
+		where id
+		=#{trade.sellerMemberId,jdbcType=BIGINT}
+	</update>
+	<update id="updateByTrade5">
+		update treasure_member set
+		integral=integral -
+		#{trade.amount}
+		where id
+		=#{trade.sellerMemberId,jdbcType=BIGINT}
+	</update>
+	<update id="updateByTrade6">
+		update treasure_member set
+		integral=integral +
+		#{trade.amount}
+		where id
+		=#{trade.sellerMemberId,jdbcType=BIGINT}
+	</update>
+	<update id="updateRecommendMoney">
+		update treasure_member set
+		money =
+		money+#{money,jdbcType=DOUBLE},recommend_money=recommend_money+#{money,jdbcType=DOUBLE}
+		where
+		id = #{id,jdbcType=BIGINT}
+	</update>
+	<select id="selectById" resultMap="IncomeResultMap">
+		<!-- select tm.*,
+		(select
+		sum(income) from treasure_income_record where member_id = tm.id) as
+		totalIncome,
+		(select income from treasure_income_record where member_id
+		= tm.id and
+		record_date=DATE_SUB(curdate(),INTERVAL 1 DAY)) as
+		income,(tm.integral+tm.freeze_integral+(select CASE WHEN sum(amount)
+		IS NOT NULL THEN sum(amount) ELSE 0 END from
+		treasure_trade where
+		type=2 and status=2 and seller_member_id=tm.id))
+		as totalIntegral,
+		IFNULL(SUM(b.quantity), 0) total,
+			(
+				SELECT
+					IFNULL(SUM(t2.quantity),0)
+				FROM
+					treasure_member t1
+				LEFT JOIN treasure_order t2 ON t1.id = t2.member_id
+				WHERE
+					t1.ad_code = CONCAT('ZLZC', tm.id)
+			) dyTotal
+		from
+		treasure_member tm LEFT JOIN treasure_order b ON tm.id = b.member_id where tm.id =#{id,jdbcType=BIGINT}
+		GROUP BY
+			tm.id
+		 limit
+		1 -->
+		select tm.*,
+		(select
+		sum(income) from treasure_income_record where member_id = tm.id) as
+		totalIncome,
+		(select income from treasure_income_record where member_id
+		= tm.id and
+		record_date=DATE_SUB(curdate(),INTERVAL 1 DAY)) as
+		income,(tm.integral+tm.freeze_integral+(select CASE WHEN sum(amount)
+		IS NOT NULL THEN sum(amount) ELSE 0 END from
+		treasure_trade where
+		type=2 and status=2 and seller_member_id=tm.id))
+		as totalIntegral,
+		IFNULL(SUM(b.quantity), 0) total,
+			(
+				SELECT
+					IFNULL(SUM(t2.quantity),0)
+				FROM
+					treasure_member t1
+				LEFT JOIN treasure_order t2 ON t1.id = t2.member_id
+				WHERE
+					t1.ad_code = CONCAT('ZLZC', tm.id)
+			) dyTotal,
+(SELECT COUNT(1) aNum FROM treasure_order t2 LEFT JOIN treasure_member t ON t2.member_id = t.id WHERE t.ad_code = CONCAT('ZLZC', tm.id) AND t.zone = 'A')aNum,
+(SELECT COUNT(1) aNum FROM treasure_order t2 LEFT JOIN treasure_member t ON t2.member_id = t.id WHERE t.ad_code = CONCAT('ZLZC', tm.id) AND t.zone = 'B')bNum,
+(SELECT IFNULL(SUM(t2.amount), 0) aCount FROM treasure_trade t2 LEFT JOIN treasure_member t ON t2.buyer_member_id = t.id WHERE t.ad_code = CONCAT('ZLZC', tm.id) AND t.zone = 'A')aCount,
+(SELECT IFNULL(SUM(t2.amount), 0) aCount FROM treasure_trade t2 LEFT JOIN treasure_member t ON t2.buyer_member_id = t.id WHERE t.ad_code = CONCAT('ZLZC', tm.id) AND t.zone = 'B')bCount
+		from
+		treasure_member tm LEFT JOIN treasure_order b ON tm.id = b.member_id where tm.id =#{id,jdbcType=BIGINT}
+		GROUP BY
+			tm.id
+		 limit
+		1
+	</select>
+	<update id="unfreezeIntegral">
+		update treasure_member set
+		integral=integral+freeze_integral*#{unfreezeRate,jdbcType=DOUBLE},
+		freeze_integral=freeze_integral-freeze_integral*#{unfreezeRate,jdbcType=DOUBLE},
+		thaw_date=curdate() <![CDATA[ where freeze_integral>0 AND (thaw_date <= DATE_SUB(curdate(),INTERVAL #{unfreezeDays,jdbcType=INTEGER} DAY) OR thaw_date IS NULL)]]>
+	</update>
+	<select id="selectCount" resultType="java.lang.Integer">
+		select count(id)
+		from treasure_member
+		where 1=1
+		<if test="record!=null">
+			<if test="record.fullName != null and record.fullName !='' ">
+				and full_name like
+				"%"#{record.fullName,jdbcType=VARCHAR}"%"
+			</if>
+			<if test="record.mobile != null and record.mobile !='' ">
+				and mobile like
+				"%"#{record.mobile,jdbcType=VARCHAR}"%"
+			</if>
+			<if test="record.status != null">
+				and status =#{record.status,jdbcType=TINYINT}
+			</if>
+			<if test="record.verifiedStatus != null">
+				and
+				verified_status=#{record.verifiedStatus,jdbcType=TINYINT}
+			</if>
+			<if test="record.activateStatus !=null">
+				and
+				activate_status=#{record.activateStatus,jdbcType=TINYINT}
+			</if>
+			
+		</if>
+	</select>
+	<!-- 查询表企业用户所有数据 -->
+	<select id="selectList" resultMap="RecommendMap">
+		select m.*,CONCAT('ZLZC',id) mycode,
+(SELECT IFNULL(SUM(a.total_amount),0) FROM treasure_pay_record a LEFT JOIN treasure_order b ON a.order_no = b.order_no LEFT JOIN treasure_member c ON b.member_id = c.id WHERE c.ad_code = CONCAT('ZLZC', m.id)
+		) recomm_money,
+(
+		SELECT
+		COUNT(1)
+		FROM
+		treasure_member
+		WHERE
+		ad_code =
+		CONCAT('ZLZC', m.id)
+		) AS recommend_num
+		from treasure_member m
+		where 1=1
+		<if test="record!=null">
+			<if test="record.fullName != null and record.fullName !='' ">
+				and full_name like
+				"%"#{record.fullName,jdbcType=VARCHAR}"%"
+			</if>
+			<if test="record.mobile != null and record.mobile !='' ">
+				and mobile like
+				"%"#{record.mobile,jdbcType=VARCHAR}"%"
+			</if>
+			<if test="record.status != null">
+				and status =#{record.status,jdbcType=TINYINT}
+			</if>
+			<if test="record.verifiedStatus != null">
+				and
+				verified_status=#{record.verifiedStatus,jdbcType=TINYINT}
+			</if>
+			<if test="record.activateStatus !=null">
+				and
+				activate_status=#{record.activateStatus,jdbcType=TINYINT}
+			</if>
+			<if test="record.uuid !=null">
+				and
+				uuid like
+				"%"#{record.uuid,jdbcType=VARCHAR}"%"
+			</if>
+			<if test="record.userName !=null">
+				and
+				username like
+				"%"#{record.userName,jdbcType=VARCHAR}"%"
+			</if>
+		</if>
+		<if test="pageVo !=null"><!-- 判断pageVo对象是否为空 -->
+			<if test="pageVo.sortField !=null  and pageVo.sortOrder !=null">
+				order by
+				${pageVo.sortField} ${pageVo.sortOrder}
+			</if>
+			<if test="pageVo.pageIndex >=0  and pageVo.pageSize >0">
+				limit
+				#{pageVo.pageIndex,jdbcType=INTEGER},#{pageVo.pageSize,jdbcType=INTEGER}
+			</if>
+		</if>
+	</select>
+	<update id="updateWithdraw">
+		update treasure_member set
+		money =
+		money-#{money,jdbcType=DOUBLE},consume_bean =
+		consume_bean+#{consumeBean,jdbcType=DOUBLE} where
+		id =
+		#{id,jdbcType=BIGINT}
+	</update>
+	<select id="selectAllList" resultMap="RateMap">
+		SELECT
+		m.id,
+		(
+		CASE
+		WHEN (
+		m.integral + m.freeze_integral
+		) BETWEEN 1500
+		AND 2999 THEN
+		s.rate1
+		ELSE
+		CASE
+		WHEN (
+		m.integral + m.freeze_integral
+		) BETWEEN 3000
+		AND 4999 THEN
+		s.rate2
+		ELSE
+		CASE
+		WHEN (
+		m.integral + m.freeze_integral
+		) BETWEEN 5000
+		AND
+		9999 THEN
+		s.rate3
+		ELSE
+		CASE
+		WHEN (
+		m.integral + m.freeze_integral
+		) BETWEEN
+		10000
+		AND 20000 THEN
+		s.rate4
+		ELSE
+		CASE
+		WHEN (
+		m.integral + m.freeze_integral
+		) > 20000 THEN
+		s.rate5
+		ELSE
+		0
+		END
+		END
+		END
+		END
+		END
+		) AS rate
+		FROM
+		treasure_member
+		m,
+		treasure_setting s
+		WHERE
+		m.integral + m.freeze_integral >= 1500
+	</select>
+	<update id="increaseIntegral">
+		update treasure_member m set
+		m.integral=m.integral+m.integral*#{member.rate,jdbcType=DOUBLE},
+		m.freeze_integral=m.freeze_integral+m.freeze_integral*#{member.rate,jdbcType=DOUBLE}
+		where id =
+		#{member.id,jdbcType=BIGINT}
+	</update>
+	<update id="recharge">
+		update treasure_member set
+		integral=integral+#{member.rate,jdbcType=DOUBLE},
+		activate_status=1 where id =#{member.id,jdbcType=BIGINT}
+	</update>
+	<update id="updateThawDate">
+		update treasure_member set thaw_date =now()
+		where id =
+		#{memberId,jdbcType=BIGINT}
+		and thaw_date is null
+	</update>
+	<!-- 查询指定推荐区间内会员的推荐信息 -->
+	<select id="selectByMemAndZone" resultMap="BaseResultMap">
+	    SELECT
+			IFNULL(b.quantity, 0),
+			a.*
+		FROM
+			treasure_member a
+		LEFT JOIN treasure_order b ON a.id = b.member_id
+		WHERE
+			SUBSTR(a.ad_code FROM 4) = #{memId}
+		AND a.zone = #{zone}
+	</select>
+	
+	<!-- 查询指定推荐区间内推荐的会员数 -->
+	<select id="selectCountByMemAndZone" resultType="java.lang.Integer">
+	    SELECT
+			SUM(IFNULL(b.quantity, 0))
+		FROM
+			treasure_member a
+		LEFT JOIN treasure_order b ON a.id = b.member_id
+		WHERE
+			SUBSTR(a.ad_code FROM 4) = #{memId}
+		AND a.zone = #{zone}
+	</select>
+	
+	<!-- 根据推荐码查询指定推荐区间内推荐的会员持币数 -->
+	<select id="selectCountByCode" resultType="java.lang.Integer">
+	    SELECT
+			IFNULL(SUM(b.quantity), 0)
+		FROM
+			treasure_member a
+		LEFT JOIN treasure_order b ON a.id = b.member_id
+		WHERE
+			a.ad_code = #{code}
+		AND a.zone = #{zone}
+	</select>
+	
+	<!-- 根据推荐码查询指定推荐区间内推荐的会员数 -->
+	<select id="selectNumByCode" resultType="java.lang.Integer">
+	    SELECT
+			count(1)
+		FROM
+			treasure_member a
+		LEFT JOIN treasure_order b ON a.id = b.member_id
+		WHERE
+			a.ad_code = #{code}
+		AND a.zone = #{zone}
+	</select>
+	
+	<!-- 查询会员的贝西币数 -->
+	<select id="selectVipCount" resultMap="BaseResultMap">
+	    SELECT
+			a.*, IFNULL(SUM(b.quantity), 0) total,
+			(
+				SELECT
+					IFNULL(SUM(t2.quantity),0)
+				FROM
+					treasure_member t1
+				LEFT JOIN treasure_order t2 ON t1.id = t2.member_id
+				WHERE
+					t1.ad_code = CONCAT('ZLZC', a.id)
+			) dyTotal
+		FROM
+			treasure_member a
+		LEFT JOIN treasure_order b ON a.id = b.member_id
+		GROUP BY
+			a.id
+	</select>
+	
+	<!-- 查询会员的贝西币数 -->
+	<select id="selectAll" resultMap="BaseResultMap">
+	    SELECT
+			a.*
+		FROM
+			treasure_member a
+		GROUP BY
+			a.id
+	</select>
+	
+	<select id="selectByZone" resultMap="BaseResultMap">
+	    select tm.*,
+		(select
+		sum(income) from treasure_income_record where member_id = tm.id) as
+		totalIncome,
+		(select income from treasure_income_record where member_id
+		= tm.id and
+		record_date=DATE_SUB(curdate(),INTERVAL 1 DAY)) as
+		income,(tm.integral+tm.freeze_integral+(select CASE WHEN sum(amount)
+		IS NOT NULL THEN sum(amount) ELSE 0 END from
+		treasure_trade where
+		type=2 and status=2 and seller_member_id=tm.id))
+		as totalIntegral,
+		IFNULL(SUM(b.quantity), 0) total,
+			(
+				SELECT
+					IFNULL(SUM(t2.quantity),0)
+				FROM
+					treasure_member t1
+				LEFT JOIN treasure_order t2 ON t1.id = t2.member_id
+				WHERE
+					t1.ad_code = CONCAT('ZLZC', tm.id)
+			) dyTotal<!-- ,
+(SELECT COUNT(1) aNum FROM treasure_order t2 LEFT JOIN treasure_member t ON t2.member_id = t.id WHERE t.ad_code = CONCAT('ZLZC', tm.id) AND t.zone = 'A')aNum,
+(SELECT COUNT(1) aNum FROM treasure_order t2 LEFT JOIN treasure_member t ON t2.member_id = t.id WHERE t.ad_code = CONCAT('ZLZC', tm.id) AND t.zone = 'B')bNum,
+(SELECT IFNULL(SUM(t.integral), 0) aCount FROM treasure_member t WHERE FIND_IN_SET(t.id, getChildLst(#{id})) AND t.id != tm.id  AND t.zone = 'A')aCount,
+(SELECT IFNULL(SUM(t.integral), 0) aCount FROM treasure_member t WHERE FIND_IN_SET(t.id, getChildLst(#{id})) AND t.id != tm.id  AND t.zone = 'B')bCount -->
+		from
+		treasure_member tm LEFT JOIN treasure_order b ON tm.id = b.member_id where tm.id =#{id}
+		GROUP BY
+			tm.id
+		 limit
+		1
+	</select>
+	
+	<select id="selectNumByZone" resultMap="BaseResultMap">
+	    SELECT a.* FROM treasure_member a WHERE a.ad_code = CONCAT('ZLZC',#{id}) AND a.zone = #{zone}
+	</select>
+	
+	<select id="clearsSons" resultMap="BaseResultMap" statementType="CALLABLE">
+	    <!-- SELECT
+			t.*
+		FROM
+			treasure_member t
+		WHERE
+			FIND_IN_SET(
+				t.id,
+				getChildLst (#{id})) -->
+				CALL pro_child(#{id})
+	</select>
+	
+	<!--根据用户名查询  -->
+	<select id="selectFullNmae" resultMap="BaseResultMap">
+		select 
+		 	*
+		from treasure_member 
+		where 
+		username = #{fullName}
+	</select>
+	
+	<select id="selectCodeCount" parameterType="String" resultType="int">
+	select count(*) from treasure_mobile_code where mobile=#{username}
+	</select>
+	<!-- 根据手机号查询集合 -->
+	<select id="selectMemberByMobile1" resultType="int">
+		select count(*) from treasure_member where mobile=#{mobile}
+	</select>
+	
+	<select id="selectMobile" resultMap="BaseResultMap">
+			select 
+		 	*
+		from treasure_member 
+		where 
+		username = #{userName}
+	</select>
+	<!--修改手机号  -->
+	<update id="updateMobile">
+		update treasure_member m 
+		set
+			m.mobile = #{member.userName}
+		where id = #{member.id,jdbcType=BIGINT}
+	</update>
+</mapper>

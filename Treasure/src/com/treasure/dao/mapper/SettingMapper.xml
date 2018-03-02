@@ -1,0 +1,611 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.treasure.dao.SettingMapper">
+	<resultMap id="BaseResultMap" type="com.treasure.model.Setting">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="total_count" property="totalCount" jdbcType="DOUBLE" />
+		<result column="used_count" property="usedCount" jdbcType="DOUBLE" />
+		<result column="integral_price" property="integralPrice"
+			jdbcType="DOUBLE" />
+		<result column="silver_price" property="silverPrice" jdbcType="DOUBLE" />
+		<result column="amplitude" property="amplitude" jdbcType="DOUBLE" />
+		<result column="count_amplitude" property="countAmplitude"
+			jdbcType="DOUBLE" />
+		<result column="up_or_down" property="upOrDown" jdbcType="BIT" />
+		<result column="history_highest" property="historyHighest"
+			jdbcType="DOUBLE" />
+		<result column="history_lowest" property="historyLowest"
+			jdbcType="DOUBLE" />
+		<result column="highest" property="highest" jdbcType="DOUBLE" />
+		<result column="lowest" property="lowest" jdbcType="DOUBLE" />
+		<result column="withdraw_rate" property="withdrawRate"
+			jdbcType="DOUBLE" />
+		<result column="consume_bean_rate" property="consumeBeanRate"
+			jdbcType="DOUBLE" />
+		<result column="max_buy_count" property="maxBuyCount" jdbcType="DOUBLE" />
+		<result column="rate1" property="rate1" jdbcType="DOUBLE" />
+		<result column="rate2" property="rate2" jdbcType="DOUBLE" />
+		<result column="rate3" property="rate3" jdbcType="DOUBLE" />
+		<result column="rate4" property="rate4" jdbcType="DOUBLE" />
+		<result column="rate5" property="rate5" jdbcType="DOUBLE" />
+		<result column="rate6" property="rate6" jdbcType="DOUBLE" />
+		<result column="rate7" property="rate7" jdbcType="DOUBLE" />
+		<result column="moneymanagement" property="moneymanagement" jdbcType="DOUBLE" />
+		<result column="interestrate" property="interestrate" jdbcType="DOUBLE" />
+		<result column="interestrate1" property="interestrate1" jdbcType="DOUBLE" />
+		<result column="interestrate2" property="interestrate2" jdbcType="DOUBLE" />
+		<result column="interestrate3" property="interestrate3" jdbcType="DOUBLE" />
+		<result column="interestrate4" property="interestrate4" jdbcType="DOUBLE" />
+		<result column="interestrate5" property="interestrate5" jdbcType="DOUBLE" />
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, total_count, used_count, integral_price, silver_price, amplitude,
+		count_amplitude,
+		up_or_down, history_highest, history_lowest, highest, lowest, withdraw_rate,
+		consume_bean_rate,
+		max_buy_count, rate1, rate2, rate3, rate4, rate5, rate6, rate7,
+		moneymanagement,interestrate,interestrate1,interestrate2,interestrate3,interestrate4,interestrate5
+	</sql>
+	<select id="selectByExample" resultMap="BaseResultMap"
+		parameterType="com.treasure.model.SettingExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from treasure_setting
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from treasure_setting
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from treasure_setting
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.treasure.model.SettingExample">
+		delete from treasure_setting
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.treasure.model.Setting">
+		insert into treasure_setting (id, total_count, used_count,
+		integral_price, silver_price, amplitude,
+		count_amplitude, up_or_down, history_highest,
+		history_lowest, highest, lowest,
+		withdraw_rate, consume_bean_rate, max_buy_count,
+		rate1, rate2, rate3, rate4,
+		rate5, rate6, rate7)
+		values (#{id,jdbcType=INTEGER}, #{totalCount,jdbcType=DOUBLE},
+		#{usedCount,jdbcType=DOUBLE},
+		#{integralPrice,jdbcType=DOUBLE}, #{silverPrice,jdbcType=DOUBLE}, #{amplitude,jdbcType=DOUBLE},
+		#{countAmplitude,jdbcType=DOUBLE}, #{upOrDown,jdbcType=BIT},
+		#{historyHighest,jdbcType=DOUBLE},
+		#{historyLowest,jdbcType=DOUBLE}, #{highest,jdbcType=DOUBLE}, #{lowest,jdbcType=DOUBLE},
+		#{withdrawRate,jdbcType=DOUBLE}, #{consumeBeanRate,jdbcType=DOUBLE},
+		#{maxBuyCount,jdbcType=DOUBLE},
+		#{rate1,jdbcType=DOUBLE}, 
+		#{rate2,jdbcType=DOUBLE}, 
+		#{rate3,jdbcType=DOUBLE},
+		#{rate4,jdbcType=DOUBLE},
+		#{rate5,jdbcType=DOUBLE},
+		#{rate6,jdbcType=DOUBLE},
+		#{rate7,jdbcType=DOUBLE})
+	</insert>
+	<insert id="insertSelective" parameterType="com.treasure.model.Setting">
+		insert into treasure_setting
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="totalCount != null">
+				total_count,
+			</if>
+			<if test="usedCount != null">
+				used_count,
+			</if>
+			<if test="integralPrice != null">
+				integral_price,
+			</if>
+			<if test="silverPrice != null">
+				silver_price,
+			</if>
+			<if test="amplitude != null">
+				amplitude,
+			</if>
+			<if test="countAmplitude != null">
+				count_amplitude,
+			</if>
+			<if test="upOrDown != null">
+				up_or_down,
+			</if>
+			<if test="historyHighest != null">
+				history_highest,
+			</if>
+			<if test="historyLowest != null">
+				history_lowest,
+			</if>
+			<if test="highest != null">
+				highest,
+			</if>
+			<if test="lowest != null">
+				lowest,
+			</if>
+			<if test="withdrawRate != null">
+				withdraw_rate,
+			</if>
+			<if test="consumeBeanRate != null">
+				consume_bean_rate,
+			</if>
+			<if test="maxBuyCount != null">
+				max_buy_count,
+			</if>
+			<if test="rate1 != null">
+				rate1,
+			</if>
+			<if test="rate2 != null">
+				rate2,
+			</if>
+			<if test="rate3 != null">
+				rate3,
+			</if>
+			<if test="rate4 != null">
+				rate4,
+			</if>
+			<if test="rate5 != null">
+				rate5,
+			</if>
+			<if test="rate6 != null">
+				rate6,
+			</if>
+			<if test="rate7 != null">
+				rate7,
+			</if>
+			<if test="moneymanagement != null">
+				moneymanagement,
+			</if>
+			<if test="interestrate != null">
+				interestrate,
+			</if>
+			<if test="interestrate1 != null">
+				interestrate1,
+			</if>
+			<if test="interestrate2 != null">
+				interestrate2,
+			</if>
+			<if test="interestrate3 != null">
+				interestrate3,
+			</if>
+			<if test="interestrate4 != null">
+				interestrate4,
+			</if>
+			<if test="interestrate5 != null">
+				interestrate5,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="totalCount != null">
+				#{totalCount,jdbcType=DOUBLE},
+			</if>
+			<if test="usedCount != null">
+				#{usedCount,jdbcType=DOUBLE},
+			</if>
+			<if test="integralPrice != null">
+				#{integralPrice,jdbcType=DOUBLE},
+			</if>
+			<if test="silverPrice != null">
+				#{silverPrice,jdbcType=DOUBLE},
+			</if>
+			<if test="amplitude != null">
+				#{amplitude,jdbcType=DOUBLE},
+			</if>
+			<if test="countAmplitude != null">
+				#{countAmplitude,jdbcType=DOUBLE},
+			</if>
+			<if test="upOrDown != null">
+				#{upOrDown,jdbcType=BIT},
+			</if>
+			<if test="historyHighest != null">
+				#{historyHighest,jdbcType=DOUBLE},
+			</if>
+			<if test="historyLowest != null">
+				#{historyLowest,jdbcType=DOUBLE},
+			</if>
+			<if test="highest != null">
+				#{highest,jdbcType=DOUBLE},
+			</if>
+			<if test="lowest != null">
+				#{lowest,jdbcType=DOUBLE},
+			</if>
+			<if test="withdrawRate != null">
+				#{withdrawRate,jdbcType=DOUBLE},
+			</if>
+			<if test="consumeBeanRate != null">
+				#{consumeBeanRate,jdbcType=DOUBLE},
+			</if>
+			<if test="maxBuyCount != null">
+				#{maxBuyCount,jdbcType=DOUBLE},
+			</if>
+			<if test="rate1 != null">
+				#{rate1,jdbcType=DOUBLE},
+			</if>
+			<if test="rate2 != null">
+				#{rate2,jdbcType=DOUBLE},
+			</if>
+			<if test="rate3 != null">
+				#{rate3,jdbcType=DOUBLE},
+			</if>
+			<if test="rate4 != null">
+				#{rate4,jdbcType=DOUBLE},
+			</if>
+			<if test="rate5 != null">
+				#{rate5,jdbcType=DOUBLE},
+			</if>
+			<if test="rate6 != null">
+				#{rate6,jdbcType=DOUBLE},
+			</if>
+			<if test="rate7 != null">
+				#{rate7,jdbcType=DOUBLE},
+			</if>
+			<if test="moneymanagement != null">
+				#{moneymanagement,jdbcType=DOUBLE},
+			</if>
+			<if test="interestrate != null">
+				#{interestrate,jdbcType=DOUBLE},
+			</if>
+			<if test="interestrate1 != null">
+				#{interestrate1,jdbcType=DOUBLE},
+			</if>
+			<if test="interestrate2 != null">
+				#{interestrate2,jdbcType=DOUBLE},
+			</if>
+			<if test="interestrate3 != null">
+				#{interestrate3,jdbcType=DOUBLE},
+			</if>
+			<if test="interestrate4 != null">
+				#{interestrate4,jdbcType=DOUBLE},
+			</if>
+			<if test="interestrate5 != null">
+				#{interestrate5,jdbcType=DOUBLE},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.treasure.model.SettingExample"
+		resultType="java.lang.Integer">
+		select count(*) from treasure_setting
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update treasure_setting
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=INTEGER},
+			</if>
+			<if test="record.totalCount != null">
+				total_count = #{record.totalCount,jdbcType=DOUBLE},
+			</if>
+			<if test="record.usedCount != null">
+				used_count = #{record.usedCount,jdbcType=DOUBLE},
+			</if>
+			<if test="record.integralPrice != null">
+				integral_price = #{record.integralPrice,jdbcType=DOUBLE},
+			</if>
+			<if test="record.silverPrice != null">
+				silver_price = #{record.silverPrice,jdbcType=DOUBLE},
+			</if>
+			<if test="record.amplitude != null">
+				amplitude = #{record.amplitude,jdbcType=DOUBLE},
+			</if>
+			<if test="record.countAmplitude != null">
+				count_amplitude = #{record.countAmplitude,jdbcType=DOUBLE},
+			</if>
+			<if test="record.upOrDown != null">
+				up_or_down = #{record.upOrDown,jdbcType=BIT},
+			</if>
+			<if test="record.historyHighest != null">
+				history_highest = #{record.historyHighest,jdbcType=DOUBLE},
+			</if>
+			<if test="record.historyLowest != null">
+				history_lowest = #{record.historyLowest,jdbcType=DOUBLE},
+			</if>
+			<if test="record.highest != null">
+				highest = #{record.highest,jdbcType=DOUBLE},
+			</if>
+			<if test="record.lowest != null">
+				lowest = #{record.lowest,jdbcType=DOUBLE},
+			</if>
+			<if test="record.withdrawRate != null">
+				withdraw_rate = #{record.withdrawRate,jdbcType=DOUBLE},
+			</if>
+			<if test="record.consumeBeanRate != null">
+				consume_bean_rate = #{record.consumeBeanRate,jdbcType=DOUBLE},
+			</if>
+			<if test="record.maxBuyCount != null">
+				max_buy_count = #{record.maxBuyCount,jdbcType=DOUBLE},
+			</if>
+			<if test="record.rate1 != null">
+				rate1 = #{record.rate1,jdbcType=DOUBLE},
+			</if>
+			<if test="record.rate2 != null">
+				rate2 = #{record.rate2,jdbcType=DOUBLE},
+			</if>
+			<if test="record.rate3 != null">
+				rate3 = #{record.rate3,jdbcType=DOUBLE},
+			</if>
+			<if test="record.rate4 != null">
+				rate4 = #{record.rate4,jdbcType=DOUBLE},
+			</if>
+			<if test="record.rate5 != null">
+				rate5 = #{record.rate5,jdbcType=DOUBLE},
+			</if>
+			<if test="record.rate6 != null">
+				rate6 = #{record.rate6,jdbcType=DOUBLE},
+			</if>
+			<if test="record.rate7 != null">
+				rate7 = #{record.rate7,jdbcType=DOUBLE},
+			</if>
+			<if test="record.moneymanagement != null">
+				moneymanagement = #{record.moneymanagement,jdbcType=DOUBLE},
+			</if>
+			<if test="record.interestrate != null">
+				interestrate = #{record.interestrate,jdbcType=DOUBLE},
+			</if>
+			<if test="record.interestrate1 != null">
+				interestrate1 = #{record.interestrate1,jdbcType=DOUBLE},
+			</if>
+			<if test="record.interestrate2 != null">
+				interestrate2 = #{record.interestrate2,jdbcType=DOUBLE},
+			</if>
+			<if test="record.interestrate3 != null">
+				interestrate3 = #{record.interestrate3,jdbcType=DOUBLE},
+			</if>
+			<if test="record.interestrate4 != null">
+				interestrate4 = #{record.interestrate4,jdbcType=DOUBLE},
+			</if>
+			<if test="record.interestrate5 != null">
+				interestrate5 = #{record.interestrate5,jdbcType=DOUBLE},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update treasure_setting
+		set id = #{record.id,jdbcType=INTEGER},
+		total_count = #{record.totalCount,jdbcType=DOUBLE},
+		used_count = #{record.usedCount,jdbcType=DOUBLE},
+		integral_price = #{record.integralPrice,jdbcType=DOUBLE},
+		silver_price = #{record.silverPrice,jdbcType=DOUBLE},
+		amplitude = #{record.amplitude,jdbcType=DOUBLE},
+		count_amplitude = #{record.countAmplitude,jdbcType=DOUBLE},
+		up_or_down = #{record.upOrDown,jdbcType=BIT},
+		history_highest = #{record.historyHighest,jdbcType=DOUBLE},
+		history_lowest = #{record.historyLowest,jdbcType=DOUBLE},
+		highest = #{record.highest,jdbcType=DOUBLE},
+		lowest = #{record.lowest,jdbcType=DOUBLE},
+		withdraw_rate = #{record.withdrawRate,jdbcType=DOUBLE},
+		consume_bean_rate = #{record.consumeBeanRate,jdbcType=DOUBLE},
+		max_buy_count = #{record.maxBuyCount,jdbcType=DOUBLE},
+		rate1 = #{record.rate1,jdbcType=DOUBLE},
+		rate2 = #{record.rate2,jdbcType=DOUBLE},
+		rate3 = #{record.rate3,jdbcType=DOUBLE},
+		rate4 = #{record.rate4,jdbcType=DOUBLE},
+		rate5 = #{record.rate5,jdbcType=DOUBLE},
+		rate6 = #{record.rate6,jdbcType=DOUBLE},
+		rate7 = #{record.rate7,jdbcType=DOUBLE}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.treasure.model.Setting">
+		update treasure_setting
+		<set>
+			<if test="totalCount != null">
+				total_count = #{totalCount,jdbcType=DOUBLE},
+			</if>
+			<if test="usedCount != null">
+				used_count = #{usedCount,jdbcType=DOUBLE},
+			</if>
+			<if test="integralPrice != null">
+				integral_price = #{integralPrice,jdbcType=DOUBLE},
+			</if>
+			<if test="silverPrice != null">
+				silver_price = #{silverPrice,jdbcType=DOUBLE},
+			</if>
+			<if test="amplitude != null">
+				amplitude = #{amplitude,jdbcType=DOUBLE},
+			</if>
+			<if test="countAmplitude != null">
+				count_amplitude = #{countAmplitude,jdbcType=DOUBLE},
+			</if>
+			<if test="upOrDown != null">
+				up_or_down = #{upOrDown,jdbcType=BIT},
+			</if>
+			<if test="historyHighest != null">
+				history_highest = #{historyHighest,jdbcType=DOUBLE},
+			</if>
+			<if test="historyLowest != null">
+				history_lowest = #{historyLowest,jdbcType=DOUBLE},
+			</if>
+			<if test="highest != null">
+				highest = #{highest,jdbcType=DOUBLE},
+			</if>
+			<if test="lowest != null">
+				lowest = #{lowest,jdbcType=DOUBLE},
+			</if>
+			<if test="withdrawRate != null">
+				withdraw_rate = #{withdrawRate,jdbcType=DOUBLE},
+			</if>
+			<if test="consumeBeanRate != null">
+				consume_bean_rate = #{consumeBeanRate,jdbcType=DOUBLE},
+			</if>
+			<if test="maxBuyCount != null">
+				max_buy_count = #{maxBuyCount,jdbcType=DOUBLE},
+			</if>
+			<if test="rate1 != null">
+				rate1 = #{rate1,jdbcType=DOUBLE},
+			</if>
+			<if test="rate2 != null">
+				rate2 = #{rate2,jdbcType=DOUBLE},
+			</if>
+			<if test="rate3 != null">
+				rate3 = #{rate3,jdbcType=DOUBLE},
+			</if>
+			<if test="rate4 != null">
+				rate4 = #{rate4,jdbcType=DOUBLE},
+			</if>
+			<if test="rate5 != null">
+				rate5 = #{rate5,jdbcType=DOUBLE},
+			</if>
+			<if test="rate6 != null">
+				rate6 = #{rate6,jdbcType=DOUBLE},
+			</if>
+			<if test="rate7 != null">
+				rate7 = #{rate7,jdbcType=DOUBLE},
+			</if>
+			<if test="moneymanagement != null">
+				moneymanagement = #{moneymanagement,jdbcType=DOUBLE},
+			</if>
+			<if test="interestrate != null">
+				interestrate = #{interestrate,jdbcType=DOUBLE},
+			</if>
+			<if test="interestrate1 != null">
+				interestrate1 = #{interestrate1,jdbcType=DOUBLE},
+			</if>
+			<if test="interestrate2 != null">
+				interestrate2 = #{interestrate2,jdbcType=DOUBLE},
+			</if>
+			<if test="interestrate3 != null">
+				interestrate3 = #{interestrate3,jdbcType=DOUBLE},
+			</if>
+			<if test="interestrate4 != null">
+				interestrate4 = #{interestrate4,jdbcType=DOUBLE},
+			</if>
+			<if test="interestrate5 != null">
+				interestrate5 = #{interestrate5,jdbcType=DOUBLE},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.treasure.model.Setting">
+		update treasure_setting
+		set total_count = #{totalCount,jdbcType=DOUBLE},
+		used_count = #{usedCount,jdbcType=DOUBLE},
+		integral_price = #{integralPrice,jdbcType=DOUBLE},
+		silver_price = #{silverPrice,jdbcType=DOUBLE},
+		amplitude = #{amplitude,jdbcType=DOUBLE},
+		count_amplitude = #{countAmplitude,jdbcType=DOUBLE},
+		up_or_down = #{upOrDown,jdbcType=BIT},
+		history_highest = #{historyHighest,jdbcType=DOUBLE},
+		history_lowest = #{historyLowest,jdbcType=DOUBLE},
+		highest = #{highest,jdbcType=DOUBLE},
+		lowest = #{lowest,jdbcType=DOUBLE},
+		withdraw_rate = #{withdrawRate,jdbcType=DOUBLE},
+		consume_bean_rate = #{consumeBeanRate,jdbcType=DOUBLE},
+		max_buy_count = #{maxBuyCount,jdbcType=DOUBLE},
+		rate1 = #{rate1,jdbcType=DOUBLE},
+		rate2 = #{rate2,jdbcType=DOUBLE},
+		rate3 = #{rate3,jdbcType=DOUBLE},
+		rate4 = #{rate4,jdbcType=DOUBLE},
+		rate5 = #{rate5,jdbcType=DOUBLE},
+		rate6 = #{rate6,jdbcType=DOUBLE},
+		rate7 = #{rate7,jdbcType=DOUBLE}
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<select id="selectSettingInfo" resultMap="BaseResultMap">
+		select * from
+		treasure_setting limit 1
+	</select>
+	<select id="querySettingInfo1" resultMap="BaseResultMap">
+		select
+		s.id,s.total_count,s.used_count,s.integral_price,s.silver_price,s.amplitude,s.highest,s.lowest,s.withdraw_rate,s.consume_bean_rate,(select
+		max(price) from treasure_price_record) as history_highest,(select
+		min(price) from treasure_price_record) as history_lowest from
+		treasure_setting s limit 1
+	</select>
+	<update id="updateIntegral">
+		update treasure_setting
+		set used_count =used_count+
+		#{integral,jdbcType=DOUBLE},total_count=total_count-#{integral,jdbcType=DOUBLE}
+	</update>
+</mapper>
